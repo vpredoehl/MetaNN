@@ -7,6 +7,50 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		08095D672DFCBD0A008D6698 /* test_interpolate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC39C2DFA90C500C6E24A /* test_interpolate.cpp */; };
+		08095D7C2DFCBD6C008D6698 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC55A2DFCBB0600C6E24A /* main.cpp */; };
+		08095D7F2DFCBECB008D6698 /* test_interpolate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC39C2DFA90C500C6E24A /* test_interpolate.cpp */; };
+		08095D872DFCBEED008D6698 /* test_single_layer_perceptron.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC5012DFCBB0600C6E24A /* test_single_layer_perceptron.cpp */; };
+		08095D882DFCBEED008D6698 /* test_weight_layer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC5022DFCBB0600C6E24A /* test_weight_layer.cpp */; };
+		08095D892DFCBEED008D6698 /* test_bias_layer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC4FE2DFCBB0600C6E24A /* test_bias_layer.cpp */; };
+		08095D8A2DFCBEED008D6698 /* test_compose_kenrel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC4FF2DFCBB0600C6E24A /* test_compose_kenrel.cpp */; };
+		08095D8B2DFCBEED008D6698 /* test_linear_layer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC5002DFCBB0600C6E24A /* test_linear_layer.cpp */; };
+		08095D982DFCBF64008D6698 /* test_square_layer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC5402DFCBB0600C6E24A /* test_square_layer.cpp */; };
+		08095D992DFCBF64008D6698 /* test_asinh_layer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC53B2DFCBB0600C6E24A /* test_asinh_layer.cpp */; };
+		08095D9A2DFCBF64008D6698 /* test_cos_layer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC53C2DFCBB0600C6E24A /* test_cos_layer.cpp */; };
+		08095D9B2DFCBF64008D6698 /* test_tanh_layer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC5432DFCBB0600C6E24A /* test_tanh_layer.cpp */; };
+		08095D9C2DFCBF64008D6698 /* test_acos_layer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC5372DFCBB0600C6E24A /* test_acos_layer.cpp */; };
+		08095D9D2DFCBF64008D6698 /* test_sin_layer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC53F2DFCBB0600C6E24A /* test_sin_layer.cpp */; };
+		08095D9E2DFCBF64008D6698 /* test_tan_layer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC5422DFCBB0600C6E24A /* test_tan_layer.cpp */; };
+		08095D9F2DFCBF64008D6698 /* test_multiply_layer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC53D2DFCBB0600C6E24A /* test_multiply_layer.cpp */; };
+		08095DA02DFCBF64008D6698 /* test_abs_layer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC5362DFCBB0600C6E24A /* test_abs_layer.cpp */; };
+		08095DA12DFCBF64008D6698 /* test_add_layer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC5392DFCBB0600C6E24A /* test_add_layer.cpp */; };
+		08095DA22DFCBF64008D6698 /* test_sigmoid_layer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC53E2DFCBB0600C6E24A /* test_sigmoid_layer.cpp */; };
+		08095DA32DFCBF64008D6698 /* test_asin_layer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC53A2DFCBB0600C6E24A /* test_asin_layer.cpp */; };
+		08095DA42DFCBF64008D6698 /* test_substract_layer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC5412DFCBB0600C6E24A /* test_substract_layer.cpp */; };
+		08095DA52DFCBF64008D6698 /* test_acosh_layer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC5382DFCBB0600C6E24A /* test_acosh_layer.cpp */; };
+		08095DA62DFCBF85008D6698 /* test_relu_layer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC5472DFCBB0600C6E24A /* test_relu_layer.cpp */; };
+		08095DA72DFCBF85008D6698 /* test_softmax_layer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC5482DFCBB0600C6E24A /* test_softmax_layer.cpp */; };
+		08095DA82DFCBF85008D6698 /* test_nll_loss_layer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC5462DFCBB0600C6E24A /* test_nll_loss_layer.cpp */; };
+		08095DA92DFCBF98008D6698 /* test_value_source_layer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC54D2DFCBB0600C6E24A /* test_value_source_layer.cpp */; };
+		08095DAA2DFCBF98008D6698 /* test_permute_layer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC5512DFCBB0600C6E24A /* test_permute_layer.cpp */; };
+		08095DAB2DFCBF98008D6698 /* test_param_source_layer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC54C2DFCBB0600C6E24A /* test_param_source_layer.cpp */; };
+		08095DAC2DFCBF98008D6698 /* test_interpolate_layer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC54B2DFCBB0600C6E24A /* test_interpolate_layer.cpp */; };
+		08095DAD2DFCBF98008D6698 /* test_dot_layer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC5502DFCBB0600C6E24A /* test_dot_layer.cpp */; };
+		08095DAE2DFCBF98008D6698 /* test_gru.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC5562DFCBB0600C6E24A /* test_gru.cpp */; };
+		08095DAF2DFCBF98008D6698 /* test_recurrent_layer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC5572DFCBB0600C6E24A /* test_recurrent_layer.cpp */; };
+		08095DB02DFCC0C3008D6698 /* test_sequential.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC5BB2DFCBB2700C6E24A /* test_sequential.cpp */; };
+		08095DB12DFCC0C3008D6698 /* test_set.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC5BC2DFCBB2700C6E24A /* test_set.cpp */; };
+		08095DB22DFCC0C3008D6698 /* test_map.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC5B92DFCBB2700C6E24A /* test_map.cpp */; };
+		08095DB32DFCC0C3008D6698 /* test_multi_map.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC5BA2DFCBB2700C6E24A /* test_multi_map.cpp */; };
+		08095DB42DFCC0CC008D6698 /* test_gaussian_filler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC5C02DFCBB2700C6E24A /* test_gaussian_filler.cpp */; };
+		08095DB52DFCC0CC008D6698 /* test_param_initializer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC5C12DFCBB2700C6E24A /* test_param_initializer.cpp */; };
+		08095DB62DFCC0CC008D6698 /* param_initializer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC5BE2DFCBB2700C6E24A /* param_initializer.cpp */; };
+		08095DB72DFCC0CC008D6698 /* test_var_scale_filler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC5C32DFCBB2700C6E24A /* test_var_scale_filler.cpp */; };
+		08095DB82DFCC0CC008D6698 /* test_constant_filler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC5BF2DFCBB2700C6E24A /* test_constant_filler.cpp */; };
+		08095DB92DFCC0CC008D6698 /* test_uniform_filler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC5C22DFCBB2700C6E24A /* test_uniform_filler.cpp */; };
+		08095DBC2DFCC10C008D6698 /* test_policy_operations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC5C82DFCBB2700C6E24A /* test_policy_operations.cpp */; };
+		08095DBD2DFCC12B008D6698 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC5CA2DFCBB2700C6E24A /* main.cpp */; };
 		08DDC3AA2DFA90C500C6E24A /* test_tile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC3A32DFA90C500C6E24A /* test_tile.cpp */; };
 		08DDC3AB2DFA90C500C6E24A /* test_zero_tensor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC37F2DFA90C500C6E24A /* test_zero_tensor.cpp */; };
 		08DDC3AC2DFA90C500C6E24A /* test_nll_loss.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC3972DFA90C500C6E24A /* test_nll_loss.cpp */; };
@@ -47,6 +91,24 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		08095D772DFCBD0A008D6698 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		08095D822DFCBECB008D6698 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 		0870E4A12D698BBC0097085B /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -59,7 +121,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		0870E4A32D698BBC0097085B /* MetaNNXC */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = MetaNNXC; sourceTree = BUILT_PRODUCTS_DIR; };
+		08095D7B2DFCBD0A008D6698 /* LayerTest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = LayerTest; sourceTree = BUILT_PRODUCTS_DIR; };
+		08095D862DFCBECB008D6698 /* OtherTests */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = OtherTests; sourceTree = BUILT_PRODUCTS_DIR; };
+		0870E4A32D698BBC0097085B /* DataOpTest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = DataOpTest; sourceTree = BUILT_PRODUCTS_DIR; };
 		08DDC3752DFA90C500C6E24A /* _.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _.h; sourceTree = "<group>"; };
 		08DDC3762DFA90C500C6E24A /* test_shape.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_shape.cpp; sourceTree = "<group>"; };
 		08DDC3782DFA90C500C6E24A /* _.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _.h; sourceTree = "<group>"; };
@@ -107,9 +171,78 @@
 		08DDC3A82DFA90C500C6E24A /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		08DDC3CF2DFA914400C6E24A /* calculate_tags.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = calculate_tags.h; path = Tests/calculate_tags.h; sourceTree = SOURCE_ROOT; };
 		08DDC3D02DFA914400C6E24A /* data_gen.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = data_gen.h; path = Tests/data_gen.h; sourceTree = SOURCE_ROOT; };
+		08DDC4FD2DFCBB0600C6E24A /* _.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _.h; sourceTree = "<group>"; };
+		08DDC4FE2DFCBB0600C6E24A /* test_bias_layer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_bias_layer.cpp; sourceTree = "<group>"; };
+		08DDC4FF2DFCBB0600C6E24A /* test_compose_kenrel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_compose_kenrel.cpp; sourceTree = "<group>"; };
+		08DDC5002DFCBB0600C6E24A /* test_linear_layer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_linear_layer.cpp; sourceTree = "<group>"; };
+		08DDC5012DFCBB0600C6E24A /* test_single_layer_perceptron.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_single_layer_perceptron.cpp; sourceTree = "<group>"; };
+		08DDC5022DFCBB0600C6E24A /* test_weight_layer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_weight_layer.cpp; sourceTree = "<group>"; };
+		08DDC5352DFCBB0600C6E24A /* _.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _.h; sourceTree = "<group>"; };
+		08DDC5362DFCBB0600C6E24A /* test_abs_layer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_abs_layer.cpp; sourceTree = "<group>"; };
+		08DDC5372DFCBB0600C6E24A /* test_acos_layer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_acos_layer.cpp; sourceTree = "<group>"; };
+		08DDC5382DFCBB0600C6E24A /* test_acosh_layer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_acosh_layer.cpp; sourceTree = "<group>"; };
+		08DDC5392DFCBB0600C6E24A /* test_add_layer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_add_layer.cpp; sourceTree = "<group>"; };
+		08DDC53A2DFCBB0600C6E24A /* test_asin_layer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_asin_layer.cpp; sourceTree = "<group>"; };
+		08DDC53B2DFCBB0600C6E24A /* test_asinh_layer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_asinh_layer.cpp; sourceTree = "<group>"; };
+		08DDC53C2DFCBB0600C6E24A /* test_cos_layer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_cos_layer.cpp; sourceTree = "<group>"; };
+		08DDC53D2DFCBB0600C6E24A /* test_multiply_layer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_multiply_layer.cpp; sourceTree = "<group>"; };
+		08DDC53E2DFCBB0600C6E24A /* test_sigmoid_layer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_sigmoid_layer.cpp; sourceTree = "<group>"; };
+		08DDC53F2DFCBB0600C6E24A /* test_sin_layer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_sin_layer.cpp; sourceTree = "<group>"; };
+		08DDC5402DFCBB0600C6E24A /* test_square_layer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_square_layer.cpp; sourceTree = "<group>"; };
+		08DDC5412DFCBB0600C6E24A /* test_substract_layer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_substract_layer.cpp; sourceTree = "<group>"; };
+		08DDC5422DFCBB0600C6E24A /* test_tan_layer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_tan_layer.cpp; sourceTree = "<group>"; };
+		08DDC5432DFCBB0600C6E24A /* test_tanh_layer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_tanh_layer.cpp; sourceTree = "<group>"; };
+		08DDC5452DFCBB0600C6E24A /* _.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _.h; sourceTree = "<group>"; };
+		08DDC5462DFCBB0600C6E24A /* test_nll_loss_layer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_nll_loss_layer.cpp; sourceTree = "<group>"; };
+		08DDC5472DFCBB0600C6E24A /* test_relu_layer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_relu_layer.cpp; sourceTree = "<group>"; };
+		08DDC5482DFCBB0600C6E24A /* test_softmax_layer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_softmax_layer.cpp; sourceTree = "<group>"; };
+		08DDC54A2DFCBB0600C6E24A /* _.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _.h; sourceTree = "<group>"; };
+		08DDC54B2DFCBB0600C6E24A /* test_interpolate_layer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_interpolate_layer.cpp; sourceTree = "<group>"; };
+		08DDC54C2DFCBB0600C6E24A /* test_param_source_layer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_param_source_layer.cpp; sourceTree = "<group>"; };
+		08DDC54D2DFCBB0600C6E24A /* test_value_source_layer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_value_source_layer.cpp; sourceTree = "<group>"; };
+		08DDC54F2DFCBB0600C6E24A /* _.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _.h; sourceTree = "<group>"; };
+		08DDC5502DFCBB0600C6E24A /* test_dot_layer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_dot_layer.cpp; sourceTree = "<group>"; };
+		08DDC5512DFCBB0600C6E24A /* test_permute_layer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_permute_layer.cpp; sourceTree = "<group>"; };
+		08DDC5532DFCBB0600C6E24A /* _.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _.h; sourceTree = "<group>"; };
+		08DDC5552DFCBB0600C6E24A /* _.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _.h; sourceTree = "<group>"; };
+		08DDC5562DFCBB0600C6E24A /* test_gru.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_gru.cpp; sourceTree = "<group>"; };
+		08DDC5572DFCBB0600C6E24A /* test_recurrent_layer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_recurrent_layer.cpp; sourceTree = "<group>"; };
+		08DDC5592DFCBB0600C6E24A /* LayerTest.project */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = LayerTest.project; sourceTree = "<group>"; };
+		08DDC55A2DFCBB0600C6E24A /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		08DDC5B92DFCBB2700C6E24A /* test_map.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_map.cpp; sourceTree = "<group>"; };
+		08DDC5BA2DFCBB2700C6E24A /* test_multi_map.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_multi_map.cpp; sourceTree = "<group>"; };
+		08DDC5BB2DFCBB2700C6E24A /* test_sequential.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_sequential.cpp; sourceTree = "<group>"; };
+		08DDC5BC2DFCBB2700C6E24A /* test_set.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_set.cpp; sourceTree = "<group>"; };
+		08DDC5BE2DFCBB2700C6E24A /* param_initializer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = param_initializer.cpp; sourceTree = "<group>"; };
+		08DDC5BF2DFCBB2700C6E24A /* test_constant_filler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_constant_filler.cpp; sourceTree = "<group>"; };
+		08DDC5C02DFCBB2700C6E24A /* test_gaussian_filler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_gaussian_filler.cpp; sourceTree = "<group>"; };
+		08DDC5C12DFCBB2700C6E24A /* test_param_initializer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_param_initializer.cpp; sourceTree = "<group>"; };
+		08DDC5C22DFCBB2700C6E24A /* test_uniform_filler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_uniform_filler.cpp; sourceTree = "<group>"; };
+		08DDC5C32DFCBB2700C6E24A /* test_var_scale_filler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_var_scale_filler.cpp; sourceTree = "<group>"; };
+		08DDC5C52DFCBB2700C6E24A /* _.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _.h; sourceTree = "<group>"; };
+		08DDC5C72DFCBB2700C6E24A /* _.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _.h; sourceTree = "<group>"; };
+		08DDC5C82DFCBB2700C6E24A /* test_policy_operations.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_policy_operations.cpp; sourceTree = "<group>"; };
+		08DDC5CA2DFCBB2700C6E24A /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		08DDC5CB2DFCBB2700C6E24A /* OtherTests.mk */ = {isa = PBXFileReference; lastKnownFileType = text; path = OtherTests.mk; sourceTree = "<group>"; };
+		08DDC5CC2DFCBB2700C6E24A /* OtherTests.project */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = OtherTests.project; sourceTree = "<group>"; };
+		08DDC5CD2DFCBB2700C6E24A /* OtherTests.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = OtherTests.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		08095D762DFCBD0A008D6698 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		08095D812DFCBECB008D6698 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		0870E4A02D698BBC0097085B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -123,6 +256,8 @@
 		0870E49A2D698BBC0097085B = {
 			isa = PBXGroup;
 			children = (
+				08DDC5CE2DFCBB2700C6E24A /* OtherTests */,
+				08DDC55B2DFCBB0600C6E24A /* LayerTest */,
 				08DDC3A92DFA90C500C6E24A /* DataOpTest */,
 				0870E4A42D698BBC0097085B /* Products */,
 			);
@@ -131,7 +266,9 @@
 		0870E4A42D698BBC0097085B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				0870E4A32D698BBC0097085B /* MetaNNXC */,
+				0870E4A32D698BBC0097085B /* DataOpTest */,
+				08095D7B2DFCBD0A008D6698 /* LayerTest */,
+				08095D862DFCBECB008D6698 /* OtherTests */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -247,12 +384,209 @@
 			path = Tests/DataOpTest;
 			sourceTree = "<group>";
 		};
+		08DDC5032DFCBB0600C6E24A /* composite */ = {
+			isa = PBXGroup;
+			children = (
+				08DDC4FD2DFCBB0600C6E24A /* _.h */,
+				08DDC4FE2DFCBB0600C6E24A /* test_bias_layer.cpp */,
+				08DDC4FF2DFCBB0600C6E24A /* test_compose_kenrel.cpp */,
+				08DDC5002DFCBB0600C6E24A /* test_linear_layer.cpp */,
+				08DDC5012DFCBB0600C6E24A /* test_single_layer_perceptron.cpp */,
+				08DDC5022DFCBB0600C6E24A /* test_weight_layer.cpp */,
+			);
+			path = composite;
+			sourceTree = "<group>";
+		};
+		08DDC5442DFCBB0600C6E24A /* math */ = {
+			isa = PBXGroup;
+			children = (
+				08DDC5352DFCBB0600C6E24A /* _.h */,
+				08DDC5362DFCBB0600C6E24A /* test_abs_layer.cpp */,
+				08DDC5372DFCBB0600C6E24A /* test_acos_layer.cpp */,
+				08DDC5382DFCBB0600C6E24A /* test_acosh_layer.cpp */,
+				08DDC5392DFCBB0600C6E24A /* test_add_layer.cpp */,
+				08DDC53A2DFCBB0600C6E24A /* test_asin_layer.cpp */,
+				08DDC53B2DFCBB0600C6E24A /* test_asinh_layer.cpp */,
+				08DDC53C2DFCBB0600C6E24A /* test_cos_layer.cpp */,
+				08DDC53D2DFCBB0600C6E24A /* test_multiply_layer.cpp */,
+				08DDC53E2DFCBB0600C6E24A /* test_sigmoid_layer.cpp */,
+				08DDC53F2DFCBB0600C6E24A /* test_sin_layer.cpp */,
+				08DDC5402DFCBB0600C6E24A /* test_square_layer.cpp */,
+				08DDC5412DFCBB0600C6E24A /* test_substract_layer.cpp */,
+				08DDC5422DFCBB0600C6E24A /* test_tan_layer.cpp */,
+				08DDC5432DFCBB0600C6E24A /* test_tanh_layer.cpp */,
+			);
+			path = math;
+			sourceTree = "<group>";
+		};
+		08DDC5492DFCBB0600C6E24A /* nn */ = {
+			isa = PBXGroup;
+			children = (
+				08DDC5452DFCBB0600C6E24A /* _.h */,
+				08DDC5462DFCBB0600C6E24A /* test_nll_loss_layer.cpp */,
+				08DDC5472DFCBB0600C6E24A /* test_relu_layer.cpp */,
+				08DDC5482DFCBB0600C6E24A /* test_softmax_layer.cpp */,
+			);
+			path = nn;
+			sourceTree = "<group>";
+		};
+		08DDC54E2DFCBB0600C6E24A /* others */ = {
+			isa = PBXGroup;
+			children = (
+				08DDC54A2DFCBB0600C6E24A /* _.h */,
+				08DDC54B2DFCBB0600C6E24A /* test_interpolate_layer.cpp */,
+				08DDC54C2DFCBB0600C6E24A /* test_param_source_layer.cpp */,
+				08DDC54D2DFCBB0600C6E24A /* test_value_source_layer.cpp */,
+			);
+			path = others;
+			sourceTree = "<group>";
+		};
+		08DDC5522DFCBB0600C6E24A /* tensor */ = {
+			isa = PBXGroup;
+			children = (
+				08DDC54F2DFCBB0600C6E24A /* _.h */,
+				08DDC5502DFCBB0600C6E24A /* test_dot_layer.cpp */,
+				08DDC5512DFCBB0600C6E24A /* test_permute_layer.cpp */,
+			);
+			path = tensor;
+			sourceTree = "<group>";
+		};
+		08DDC5542DFCBB0600C6E24A /* principal */ = {
+			isa = PBXGroup;
+			children = (
+				08DDC5442DFCBB0600C6E24A /* math */,
+				08DDC5492DFCBB0600C6E24A /* nn */,
+				08DDC54E2DFCBB0600C6E24A /* others */,
+				08DDC5522DFCBB0600C6E24A /* tensor */,
+				08DDC5532DFCBB0600C6E24A /* _.h */,
+			);
+			path = principal;
+			sourceTree = "<group>";
+		};
+		08DDC5582DFCBB0600C6E24A /* recurrent */ = {
+			isa = PBXGroup;
+			children = (
+				08DDC5552DFCBB0600C6E24A /* _.h */,
+				08DDC5562DFCBB0600C6E24A /* test_gru.cpp */,
+				08DDC5572DFCBB0600C6E24A /* test_recurrent_layer.cpp */,
+			);
+			path = recurrent;
+			sourceTree = "<group>";
+		};
+		08DDC55B2DFCBB0600C6E24A /* LayerTest */ = {
+			isa = PBXGroup;
+			children = (
+				08DDC5032DFCBB0600C6E24A /* composite */,
+				08DDC5542DFCBB0600C6E24A /* principal */,
+				08DDC5582DFCBB0600C6E24A /* recurrent */,
+				08DDC5592DFCBB0600C6E24A /* LayerTest.project */,
+				08DDC55A2DFCBB0600C6E24A /* main.cpp */,
+			);
+			name = LayerTest;
+			path = Tests/LayerTest;
+			sourceTree = "<group>";
+		};
+		08DDC5BD2DFCBB2700C6E24A /* facilities */ = {
+			isa = PBXGroup;
+			children = (
+				08DDC5B92DFCBB2700C6E24A /* test_map.cpp */,
+				08DDC5BA2DFCBB2700C6E24A /* test_multi_map.cpp */,
+				08DDC5BB2DFCBB2700C6E24A /* test_sequential.cpp */,
+				08DDC5BC2DFCBB2700C6E24A /* test_set.cpp */,
+			);
+			path = facilities;
+			sourceTree = "<group>";
+		};
+		08DDC5C42DFCBB2700C6E24A /* param_initializer */ = {
+			isa = PBXGroup;
+			children = (
+				08DDC5BE2DFCBB2700C6E24A /* param_initializer.cpp */,
+				08DDC5BF2DFCBB2700C6E24A /* test_constant_filler.cpp */,
+				08DDC5C02DFCBB2700C6E24A /* test_gaussian_filler.cpp */,
+				08DDC5C12DFCBB2700C6E24A /* test_param_initializer.cpp */,
+				08DDC5C22DFCBB2700C6E24A /* test_uniform_filler.cpp */,
+				08DDC5C32DFCBB2700C6E24A /* test_var_scale_filler.cpp */,
+			);
+			path = param_initializer;
+			sourceTree = "<group>";
+		};
+		08DDC5C62DFCBB2700C6E24A /* model */ = {
+			isa = PBXGroup;
+			children = (
+				08DDC5C42DFCBB2700C6E24A /* param_initializer */,
+				08DDC5C52DFCBB2700C6E24A /* _.h */,
+			);
+			path = model;
+			sourceTree = "<group>";
+		};
+		08DDC5C92DFCBB2700C6E24A /* policies */ = {
+			isa = PBXGroup;
+			children = (
+				08DDC5C72DFCBB2700C6E24A /* _.h */,
+				08DDC5C82DFCBB2700C6E24A /* test_policy_operations.cpp */,
+			);
+			path = policies;
+			sourceTree = "<group>";
+		};
+		08DDC5CE2DFCBB2700C6E24A /* OtherTests */ = {
+			isa = PBXGroup;
+			children = (
+				08DDC5BD2DFCBB2700C6E24A /* facilities */,
+				08DDC5C62DFCBB2700C6E24A /* model */,
+				08DDC5C92DFCBB2700C6E24A /* policies */,
+				08DDC5CA2DFCBB2700C6E24A /* main.cpp */,
+				08DDC5CB2DFCBB2700C6E24A /* OtherTests.mk */,
+				08DDC5CC2DFCBB2700C6E24A /* OtherTests.project */,
+				08DDC5CD2DFCBB2700C6E24A /* OtherTests.txt */,
+			);
+			name = OtherTests;
+			path = Tests/OtherTests;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		0870E4A22D698BBC0097085B /* MetaNNXC */ = {
+		08095D4F2DFCBD0A008D6698 /* LayerTest */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 0870E4AA2D698BBC0097085B /* Build configuration list for PBXNativeTarget "MetaNNXC" */;
+			buildConfigurationList = 08095D782DFCBD0A008D6698 /* Build configuration list for PBXNativeTarget "LayerTest" */;
+			buildPhases = (
+				08095D502DFCBD0A008D6698 /* Sources */,
+				08095D762DFCBD0A008D6698 /* Frameworks */,
+				08095D772DFCBD0A008D6698 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LayerTest;
+			packageProductDependencies = (
+			);
+			productName = MetaNNXC;
+			productReference = 08095D7B2DFCBD0A008D6698 /* LayerTest */;
+			productType = "com.apple.product-type.tool";
+		};
+		08095D7D2DFCBECB008D6698 /* OtherTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 08095D832DFCBECB008D6698 /* Build configuration list for PBXNativeTarget "OtherTests" */;
+			buildPhases = (
+				08095D7E2DFCBECB008D6698 /* Sources */,
+				08095D812DFCBECB008D6698 /* Frameworks */,
+				08095D822DFCBECB008D6698 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = OtherTests;
+			packageProductDependencies = (
+			);
+			productName = MetaNNXC;
+			productReference = 08095D862DFCBECB008D6698 /* OtherTests */;
+			productType = "com.apple.product-type.tool";
+		};
+		0870E4A22D698BBC0097085B /* DataOpTest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0870E4AA2D698BBC0097085B /* Build configuration list for PBXNativeTarget "DataOpTest" */;
 			buildPhases = (
 				0870E49F2D698BBC0097085B /* Sources */,
 				0870E4A02D698BBC0097085B /* Frameworks */,
@@ -262,11 +596,11 @@
 			);
 			dependencies = (
 			);
-			name = MetaNNXC;
+			name = DataOpTest;
 			packageProductDependencies = (
 			);
 			productName = MetaNNXC;
-			productReference = 0870E4A32D698BBC0097085B /* MetaNNXC */;
+			productReference = 0870E4A32D698BBC0097085B /* DataOpTest */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -297,12 +631,72 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				0870E4A22D698BBC0097085B /* MetaNNXC */,
+				0870E4A22D698BBC0097085B /* DataOpTest */,
+				08095D4F2DFCBD0A008D6698 /* LayerTest */,
+				08095D7D2DFCBECB008D6698 /* OtherTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
+		08095D502DFCBD0A008D6698 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				08095D872DFCBEED008D6698 /* test_single_layer_perceptron.cpp in Sources */,
+				08095D882DFCBEED008D6698 /* test_weight_layer.cpp in Sources */,
+				08095D982DFCBF64008D6698 /* test_square_layer.cpp in Sources */,
+				08095D992DFCBF64008D6698 /* test_asinh_layer.cpp in Sources */,
+				08095D9A2DFCBF64008D6698 /* test_cos_layer.cpp in Sources */,
+				08095D9B2DFCBF64008D6698 /* test_tanh_layer.cpp in Sources */,
+				08095D9C2DFCBF64008D6698 /* test_acos_layer.cpp in Sources */,
+				08095D9D2DFCBF64008D6698 /* test_sin_layer.cpp in Sources */,
+				08095D9E2DFCBF64008D6698 /* test_tan_layer.cpp in Sources */,
+				08095DA62DFCBF85008D6698 /* test_relu_layer.cpp in Sources */,
+				08095DA72DFCBF85008D6698 /* test_softmax_layer.cpp in Sources */,
+				08095DA82DFCBF85008D6698 /* test_nll_loss_layer.cpp in Sources */,
+				08095DA92DFCBF98008D6698 /* test_value_source_layer.cpp in Sources */,
+				08095DAA2DFCBF98008D6698 /* test_permute_layer.cpp in Sources */,
+				08095DAB2DFCBF98008D6698 /* test_param_source_layer.cpp in Sources */,
+				08095DAC2DFCBF98008D6698 /* test_interpolate_layer.cpp in Sources */,
+				08095DAD2DFCBF98008D6698 /* test_dot_layer.cpp in Sources */,
+				08095DAE2DFCBF98008D6698 /* test_gru.cpp in Sources */,
+				08095DAF2DFCBF98008D6698 /* test_recurrent_layer.cpp in Sources */,
+				08095D9F2DFCBF64008D6698 /* test_multiply_layer.cpp in Sources */,
+				08095DA02DFCBF64008D6698 /* test_abs_layer.cpp in Sources */,
+				08095DA12DFCBF64008D6698 /* test_add_layer.cpp in Sources */,
+				08095DA22DFCBF64008D6698 /* test_sigmoid_layer.cpp in Sources */,
+				08095DA32DFCBF64008D6698 /* test_asin_layer.cpp in Sources */,
+				08095DA42DFCBF64008D6698 /* test_substract_layer.cpp in Sources */,
+				08095DA52DFCBF64008D6698 /* test_acosh_layer.cpp in Sources */,
+				08095D892DFCBEED008D6698 /* test_bias_layer.cpp in Sources */,
+				08095D8A2DFCBEED008D6698 /* test_compose_kenrel.cpp in Sources */,
+				08095D8B2DFCBEED008D6698 /* test_linear_layer.cpp in Sources */,
+				08095D672DFCBD0A008D6698 /* test_interpolate.cpp in Sources */,
+				08095D7C2DFCBD6C008D6698 /* main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		08095D7E2DFCBECB008D6698 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				08095D7F2DFCBECB008D6698 /* test_interpolate.cpp in Sources */,
+				08095DB02DFCC0C3008D6698 /* test_sequential.cpp in Sources */,
+				08095DB12DFCC0C3008D6698 /* test_set.cpp in Sources */,
+				08095DBD2DFCC12B008D6698 /* main.cpp in Sources */,
+				08095DB42DFCC0CC008D6698 /* test_gaussian_filler.cpp in Sources */,
+				08095DB52DFCC0CC008D6698 /* test_param_initializer.cpp in Sources */,
+				08095DB62DFCC0CC008D6698 /* param_initializer.cpp in Sources */,
+				08095DBC2DFCC10C008D6698 /* test_policy_operations.cpp in Sources */,
+				08095DB72DFCC0CC008D6698 /* test_var_scale_filler.cpp in Sources */,
+				08095DB82DFCC0CC008D6698 /* test_constant_filler.cpp in Sources */,
+				08095DB92DFCC0CC008D6698 /* test_uniform_filler.cpp in Sources */,
+				08095DB22DFCC0C3008D6698 /* test_map.cpp in Sources */,
+				08095DB32DFCC0C3008D6698 /* test_multi_map.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		0870E49F2D698BBC0097085B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -350,6 +744,66 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		08095D792DFCBD0A008D6698 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SYSTEM_HEADER_SEARCH_PATHS = (
+					/Volumes/Darwin/MetaNN/Tests/LayerTest,
+					/Volumes/Darwin/MetaNN,
+					/Volumes/Darwin/MetaNN/Tests,
+				);
+			};
+			name = Debug;
+		};
+		08095D7A2DFCBD0A008D6698 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SYSTEM_HEADER_SEARCH_PATHS = (
+					/Volumes/Darwin/MetaNN/Tests/LayerTest,
+					/Volumes/Darwin/MetaNN,
+					/Volumes/Darwin/MetaNN/Tests,
+				);
+			};
+			name = Release;
+		};
+		08095D842DFCBECB008D6698 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SYSTEM_HEADER_SEARCH_PATHS = (
+					"/Volumes/Darwin/MetaNN/Tests/OtherTests/**",
+					/Volumes/Darwin/MetaNN,
+					/Volumes/Darwin/MetaNN/Tests,
+				);
+			};
+			name = Debug;
+		};
+		08095D852DFCBECB008D6698 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SYSTEM_HEADER_SEARCH_PATHS = (
+					"/Volumes/Darwin/MetaNN/Tests/OtherTests/**",
+					/Volumes/Darwin/MetaNN,
+					/Volumes/Darwin/MetaNN/Tests,
+				);
+			};
+			name = Release;
+		};
 		0870E4A82D698BBC0097085B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -504,6 +958,24 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		08095D782DFCBD0A008D6698 /* Build configuration list for PBXNativeTarget "LayerTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				08095D792DFCBD0A008D6698 /* Debug */,
+				08095D7A2DFCBD0A008D6698 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		08095D832DFCBECB008D6698 /* Build configuration list for PBXNativeTarget "OtherTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				08095D842DFCBECB008D6698 /* Debug */,
+				08095D852DFCBECB008D6698 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		0870E49E2D698BBC0097085B /* Build configuration list for PBXProject "MetaNNXC" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -513,7 +985,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		0870E4AA2D698BBC0097085B /* Build configuration list for PBXNativeTarget "MetaNNXC" */ = {
+		0870E4AA2D698BBC0097085B /* Build configuration list for PBXNativeTarget "DataOpTest" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0870E4AB2D698BBC0097085B /* Debug */,
