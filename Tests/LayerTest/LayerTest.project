@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<CodeLite_Project Name="LayerTest" Version="10.0.0" InternalType="Console">
+<CodeLite_Project Name="LayerTest" Version="11000" InternalType="Console">
   <VirtualDirectory Name="composite">
     <File Name="composite/test_single_layer_perceptron.cpp"/>
     <File Name="composite/test_linear_layer.cpp"/>

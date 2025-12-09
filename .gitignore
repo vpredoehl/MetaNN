@@ -1,3 +1,8 @@
+compile_commands.json
+.cache
+DerivedData/
+xcuserdata/
+.DS_Store
 /.codelite
 /Tests/DataOpTest/DataOpTest.mk
 /Tests/DataOpTest/DataOpTest.txt
@@ -11,3 +16,4 @@
 /Tests/*/Release/
 /MetaNN/Debug/
 /MetaNN/Release/
+
