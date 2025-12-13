@@ -1,0 +1,3 @@
+[submodule "MetalSwift"]
+	path = MetalSwift
+	url = git@github.com:vpredoehl/MetalSwift.git
