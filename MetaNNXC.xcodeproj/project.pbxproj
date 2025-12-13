@@ -264,6 +264,7 @@
 		089304042E14AF07009341A6 /* policy_operations.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = policy_operations.h; sourceTree = "<group>"; };
 		089304062E14AF07009341A6 /* meta_nn.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = meta_nn.h; sourceTree = "<group>"; };
 		089304072E14AF07009341A6 /* MetaNN.project */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = MetaNN.project; sourceTree = "<group>"; };
+		08C2C5972EEBC77B009ABB31 /* MetalSwift.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MetalSwift.xcodeproj; path = "../../Developer SSD/MetalSwift/MetalSwift.xcodeproj"; sourceTree = "<group>"; };
 		08DDC3752DFA90C500C6E24A /* _.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _.h; sourceTree = "<group>"; };
 		08DDC3762DFA90C500C6E24A /* test_shape.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_shape.cpp; sourceTree = "<group>"; };
 		08DDC3782DFA90C500C6E24A /* _.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _.h; sourceTree = "<group>"; };
@@ -392,10 +393,12 @@
 		0870E49A2D698BBC0097085B = {
 			isa = PBXGroup;
 			children = (
+				08C2C5972EEBC77B009ABB31 /* MetalSwift.xcodeproj */,
 				089304082E14AF07009341A6 /* MetaNN */,
 				08DDC5CE2DFCBB2700C6E24A /* OtherTests */,
 				08DDC55B2DFCBB0600C6E24A /* LayerTest */,
 				08DDC3A92DFA90C500C6E24A /* DataOpTest */,
+				08C29A992EEBC6B6009ABB31 /* Frameworks */,
 				0870E4A42D698BBC0097085B /* Products */,
 			);
 			sourceTree = "<group>";
@@ -795,6 +798,13 @@
 				089304072E14AF07009341A6 /* MetaNN.project */,
 			);
 			path = MetaNN;
+			sourceTree = "<group>";
+		};
+		08C29A992EEBC6B6009ABB31 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		08DDC3772DFA90C500C6E24A /* facilities */ = {
