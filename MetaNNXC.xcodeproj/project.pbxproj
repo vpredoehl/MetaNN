@@ -88,7 +88,25 @@
 		08DDC3CC2DFA90C500C6E24A /* test_sin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC3902DFA90C500C6E24A /* test_sin.cpp */; };
 		08DDC3CD2DFA90C500C6E24A /* test_softmax.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC3992DFA90C500C6E24A /* test_softmax.cpp */; };
 		08DDC3CE2DFA90C500C6E24A /* test_reduce_sum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC38D2DFA90C500C6E24A /* test_reduce_sum.cpp */; };
+		08E8132B2EED3DB000665267 /* libMetalLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 08E813222EED35F500665267 /* libMetalLib.a */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		08E813212EED35F500665267 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08C2C5972EEBC77B009ABB31 /* MetalSwift.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 08C285DB2EEBC045009ABB31;
+			remoteInfo = MetalLib;
+		};
+		08E8132C2EED3DCF00665267 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08C2C5972EEBC77B009ABB31 /* MetalSwift.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 08C285DA2EEBC045009ABB31;
+			remoteInfo = MetalLib;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		08095D772DFCBD0A008D6698 /* CopyFiles */ = {
@@ -370,6 +388,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				08E8132B2EED3DB000665267 /* libMetalLib.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1073,6 +1092,14 @@
 			path = Tests/OtherTests;
 			sourceTree = "<group>";
 		};
+		08E813182EED35F500665267 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				08E813222EED35F500665267 /* libMetalLib.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1087,6 +1114,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				08E8132D2EED3DCF00665267 /* PBXTargetDependency */,
 			);
 			name = LayerTest;
 			packageProductDependencies = (
@@ -1159,6 +1187,12 @@
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 0870E4A42D698BBC0097085B /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 08E813182EED35F500665267 /* Products */;
+					ProjectRef = 08C2C5972EEBC77B009ABB31 /* MetalSwift.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				0870E4A22D698BBC0097085B /* DataOpTest */,
@@ -1167,6 +1201,16 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		08E813222EED35F500665267 /* libMetalLib.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libMetalLib.a;
+			remoteRef = 08E813212EED35F500665267 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXSourcesBuildPhase section */
 		08095D502DFCBD0A008D6698 /* Sources */ = {
@@ -1272,6 +1316,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		08E8132D2EED3DCF00665267 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = MetalLib;
+			targetProxy = 08E8132C2EED3DCF00665267 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		08095D792DFCBD0A008D6698 /* Debug */ = {
@@ -1404,6 +1456,7 @@
 					/Volumes/Darwin/MetaNN,
 					/Volumes/Darwin/MetaNN/Tests,
 				);
+				USER_HEADER_SEARCH_PATHS = "'/Volumes/Developer SSD/MetalSwift/MetalSwift'";
 			};
 			name = Debug;
 		};
@@ -1466,6 +1519,7 @@
 					/Volumes/Darwin/MetaNN,
 					/Volumes/Darwin/MetaNN/Tests,
 				);
+				USER_HEADER_SEARCH_PATHS = "'/Volumes/Developer SSD/MetalSwift/MetalSwift'";
 			};
 			name = Release;
 		};
