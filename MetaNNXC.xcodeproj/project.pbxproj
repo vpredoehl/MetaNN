@@ -1338,6 +1338,7 @@
 					/Volumes/Darwin/MetaNN,
 					/Volumes/Darwin/MetaNN/Tests,
 				);
+				USER_HEADER_SEARCH_PATHS = MetalSwift/MetalSwift;
 			};
 			name = Debug;
 		};
@@ -1353,6 +1354,7 @@
 					/Volumes/Darwin/MetaNN,
 					/Volumes/Darwin/MetaNN/Tests,
 				);
+				USER_HEADER_SEARCH_PATHS = MetalSwift/MetalSwift;
 			};
 			name = Release;
 		};
