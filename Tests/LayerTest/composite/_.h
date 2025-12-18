@@ -2,7 +2,7 @@ namespace Test::Layer
 {
     namespace Composite
     {
-        void test_compose_kenrel();
+        void test_compose_kernel();
 
         void test_bias_layer();
         void test_linear_layer();
@@ -12,7 +12,7 @@ namespace Test::Layer
 
     void test_composite()
     {
-        Composite::test_compose_kenrel();
+        Composite::test_compose_kernel();
 
         Composite::test_bias_layer();
         Composite::test_linear_layer();

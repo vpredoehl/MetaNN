@@ -1323,6 +1323,7 @@
 		08095D792DFCBD0A008D6698 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
 				CODE_SIGN_STYLE = Automatic;
 				DEAD_CODE_STRIPPING = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -1339,6 +1340,7 @@
 		08095D7A2DFCBD0A008D6698 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
 				CODE_SIGN_STYLE = Automatic;
 				DEAD_CODE_STRIPPING = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -1355,6 +1357,7 @@
 		08095D842DFCBECB008D6698 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
 				CODE_SIGN_STYLE = Automatic;
 				DEAD_CODE_STRIPPING = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -1372,6 +1375,7 @@
 		08095D852DFCBECB008D6698 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
 				CODE_SIGN_STYLE = Automatic;
 				DEAD_CODE_STRIPPING = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -1522,6 +1526,7 @@
 		0870E4AB2D698BBC0097085B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
 				CODE_SIGN_STYLE = Automatic;
 				DEAD_CODE_STRIPPING = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -1532,6 +1537,7 @@
 		0870E4AC2D698BBC0097085B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
 				CODE_SIGN_STYLE = Automatic;
 				DEAD_CODE_STRIPPING = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;

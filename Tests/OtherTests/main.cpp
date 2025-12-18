@@ -9,7 +9,7 @@ namespace Principal {
     void test_param_source_layer();
 }
 namespace Composite {
-    void test_compose_kenrel();
+    void test_compose_kernel();
 }
 }
 namespace Operation {
@@ -34,7 +34,7 @@ int main(int argc, char **argv)
     Test::Layer::Principal::test_param_source_layer();
 
     // Layer composite tests
-    Test::Layer::Composite::test_compose_kenrel();
+    Test::Layer::Composite::test_compose_kernel();
 
     // Operation math tests
     Test::Operation::Math::test_cos();

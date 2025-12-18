@@ -473,7 +473,7 @@ namespace
 
 namespace Test::Layer::Composite
 {
-    void test_compose_kenrel()
+    void test_compose_kernel()
     {
         test_compose_kernel1();
         test_compose_kernel2();
