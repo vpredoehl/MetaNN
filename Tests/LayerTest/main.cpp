@@ -87,21 +87,24 @@ int main()
     printMatrix("D", D);
 
     // Compute C = A * B
-    auto Cmul = A * B; // MetaNN overloads operator* for matrix multiplication
+  auto Cmul = Dot(A,B); // MetaNN overloads operator* for matrix multiplication
     // Then C = (A * B) + D
     auto C = Cmul + D; // Element-wise addition with the addend matrix D
+  auto E = 2 * C;
 
     // Evaluate (A*B)
     auto abHandle = Cmul.EvalRegister();
-    EvalPlan::Inst().Eval();
-    const auto& AB = abHandle.Data();
-    printMatrix("A*B", AB);
-
-    // Evaluate (A*B)+D
-    auto sumHandle = C.EvalRegister();
-    EvalPlan::Inst().Eval();
-    const auto& ABD = sumHandle.Data();
-    printMatrix("(A*B)+D", ABD);
+  auto sumHandle = C.EvalRegister();
+  auto h2 = E.EvalRegister();
+  
+  EvalPlan::Inst().Eval();
+  
+  const auto& AB = abHandle.Data();
+  const auto& ABD = sumHandle.Data();
+  const auto& E2 = h2.Data();
+  printMatrix("(A*B)+D", ABD);
+  printMatrix("A*B", AB);
+  printMatrix("E*2", E2);
 
     // Sanity-check dimensions
     assert(AB.Shape()[0] == M);
