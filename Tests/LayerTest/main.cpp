@@ -27,6 +27,8 @@ void printMatrix(const char* name, const Mat& mat)
 //    void test_principal();
 //    void test_recurrent();
 //}
+extern "C" void cpp_run_matmul_add_demo();
+extern "C" void cpp_run_gpu_demos();
 
 
 int main()
@@ -34,6 +36,14 @@ int main()
 //    Test::Layer::test_composite();
 //    Test::Layer::test_principal();
 //    Test::Layer::test_recurrent();
+  
+  
+  std::cout << "-- Running C++ GPU MatMul+Add demo --" << std::endl;
+  cpp_run_matmul_add_demo();
+
+  std::cout << "-- Running additional GPU demos --" << std::endl;
+  cpp_run_gpu_demos();
+
 
     using Elem = float;     // Typically float
     using Dev  = DeviceTags::CPU;      // Typically CPU device
@@ -91,20 +101,23 @@ int main()
     // Then C = (A * B) + D
     auto C = Cmul + D; // Element-wise addition with the addend matrix D
   auto E = 2 * C;
+  auto t = Tanh(C);
 
     // Evaluate (A*B)
     auto abHandle = Cmul.EvalRegister();
   auto sumHandle = C.EvalRegister();
   auto h2 = E.EvalRegister();
+  auto th = t.EvalRegister();
   
   EvalPlan::Inst().Eval();
   
   const auto& AB = abHandle.Data();
   const auto& ABD = sumHandle.Data();
-  const auto& E2 = h2.Data();
+//  const auto& E2 = h2.Data();
+  const auto& tnh = th.Data();
   printMatrix("(A*B)+D", ABD);
   printMatrix("A*B", AB);
-  printMatrix("E*2", E2);
+  printMatrix("Tanh", tnh);
 
     // Sanity-check dimensions
     assert(AB.Shape()[0] == M);
