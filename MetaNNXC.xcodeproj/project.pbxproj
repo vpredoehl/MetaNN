@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		080700332EFF45B80081CCF2 /* libMetalLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 080700322EFF45B80081CCF2 /* libMetalLib.a */; };
+		080700342EFF45C90081CCF2 /* libMetalLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 080700322EFF45B80081CCF2 /* libMetalLib.a */; };
+		080700352EFF473F0081CCF2 /* libMetalLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 080700322EFF45B80081CCF2 /* libMetalLib.a */; };
 		08095D672DFCBD0A008D6698 /* test_interpolate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC39C2DFA90C500C6E24A /* test_interpolate.cpp */; };
 		08095D7C2DFCBD6C008D6698 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC55A2DFCBB0600C6E24A /* main.cpp */; };
 		08095D7F2DFCBECB008D6698 /* test_interpolate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC39C2DFA90C500C6E24A /* test_interpolate.cpp */; };
@@ -94,6 +97,16 @@
 		08DDC3CD2DFA90C500C6E24A /* test_softmax.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC3992DFA90C500C6E24A /* test_softmax.cpp */; };
 		08DDC3CE2DFA90C500C6E24A /* test_reduce_sum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC38D2DFA90C500C6E24A /* test_reduce_sum.cpp */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		080700312EFF45B80081CCF2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08CE82AD2EEFB0F800A7AE01 /* MetalSwift.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 08C285DB2EEBC045009ABB31;
+			remoteInfo = MetalLib;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		08095D772DFCBD0A008D6698 /* CopyFiles */ = {
@@ -375,6 +388,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				080700342EFF45C90081CCF2 /* libMetalLib.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -382,6 +396,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				080700332EFF45B80081CCF2 /* libMetalLib.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -389,6 +404,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				080700352EFF473F0081CCF2 /* libMetalLib.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -815,6 +831,7 @@
 		08CE82AE2EEFB0F800A7AE01 /* Products */ = {
 			isa = PBXGroup;
 			children = (
+				080700322EFF45B80081CCF2 /* libMetalLib.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1185,6 +1202,16 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		080700322EFF45B80081CCF2 /* libMetalLib.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libMetalLib.a;
+			remoteRef = 080700312EFF45B80081CCF2 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXSourcesBuildPhase section */
 		08095D502DFCBD0A008D6698 /* Sources */ = {
