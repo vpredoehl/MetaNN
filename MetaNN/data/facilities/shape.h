@@ -65,6 +65,14 @@ namespace MetaNN
         explicit Shape() = default;
         
         template <typename... TIntTypes,
+                  std::enable_if_t<(std::is_convertible_v<TIntTypes, size_t> && ...) && (sizeof...(TIntTypes) == uDimNum)>* = nullptr>
+        size_t IndexToOffset(TIntTypes... indexes) const
+        {
+            size_t gap = 1;
+            return NSShape::IndexToOffset(m_dims, gap, indexes...);
+        }
+
+        template <typename... TIntTypes,
                   std::enable_if_t<(std::is_convertible_v<TIntTypes, size_t> && ...)>* = nullptr>
         explicit Shape(TIntTypes... shapes)
         {
@@ -89,14 +97,6 @@ namespace MetaNN
                                    static_cast<size_t>(1), std::multiplies<>());
         }
         
-        template <typename... TIntTypes,
-                  std::enable_if_t<(std::is_convertible_v<TIntTypes, size_t> && ...)>* = nullptr>
-        size_t IndexToOffset(TIntTypes... indexes) const
-        {
-            static_assert(sizeof...(TIntTypes) == uDimNum);
-            size_t gap = 1;
-            return NSShape::IndexToOffset(m_dims, gap, indexes...);
-        }
 
         size_t IndexToOffset(const std::array<size_t, DimNum>& indexes) const
         {

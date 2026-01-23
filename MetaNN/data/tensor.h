@@ -93,7 +93,8 @@ namespace MetaNN
         {
             static_assert(std::is_same_v<DeviceType, DeviceTags::CPU>,
                           "Only CPU supports this method.");
-            auto pos = m_shape.IndexToOffset(posParams...);
+            size_t gap = 1;
+            auto [pos, _] = NSTensor::OffsetAndVal(m_shape, gap, posParams..., ElementType{});
             return (m_mem.RawMemory())[pos];
         }
         
