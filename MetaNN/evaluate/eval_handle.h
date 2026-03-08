@@ -1,9 +1,12 @@
 #pragma once
 
+
 #include <cassert>
 #include <memory>
 #include <stdexcept>
 #include <type_traits>
+#include <optional>
+#include <utility>
 
 namespace MetaNN
 {
@@ -12,27 +15,31 @@ class EvalHandle
 {
     struct DataWithEvalInfo
     {
-        TData m_data;
+        std::optional<TData> m_data;
         bool m_eval = false;
     };
-    
+
 public:
     using DataType = TData;
+
+    EvalHandle()
+        : m_data(std::make_shared<DataWithEvalInfo>())
+    {}
 
     bool IsEvaluated() const noexcept
     {
         return m_data->m_eval;
     }
-    
+
     const TData& Data() const
     {
         if (!IsEvaluated())
         {
             throw std::runtime_error("Data is not evaluated.");
         }
-        return m_data->m_data;
+        return *(m_data->m_data);
     }
-    
+
     const void* DataPtr() const
     {
         return m_data.get();
@@ -44,14 +51,13 @@ public:
         {
             throw std::runtime_error("Data is already evaluated.");
         }
-        m_data->m_data = std::move(p_data);
+        m_data->m_data.emplace(std::move(p_data));
         m_data->m_eval = true;
     }
 
 private:
-    std::shared_ptr<DataWithEvalInfo> m_data = std::make_shared<DataWithEvalInfo>();
+    std::shared_ptr<DataWithEvalInfo> m_data;
 };
-
 template <typename TData>
 class ConstEvalHandle;
 

@@ -69,12 +69,14 @@ namespace OperAdd::NSCaseGen
             auto low_out = LowerAccess(out);
             ElementType* mem_out = low_out.MutableRawMemory();
 
-            static_assert(std::is_same_v<DeviceTypeFromHandle<TOutputHandle>, DeviceTags::CPU>, "Currently only CPU is supported");
+            using OutDevice = DeviceTypeFromHandle<TOutputHandle>;
 
-            for (size_t i = 0; i < outCount; ++i)
-            {
-                mem_out[i] = mem_in1[i % count1] + mem_in2[i % count2];
-            }
+            if constexpr (std::is_same_v<OutDevice, DeviceTags::CPU> || (std::is_same_v<OutDevice, DeviceTags::Metal>))
+#pragma omp parallel for
+                for(size_t i = 0; i < outCount; ++i) mem_out[i] = mem_in1[i % count1] + mem_in2[i % count2];
+            else static_assert(std::is_same_v<OutDevice, DeviceTags::CPU> ||
+                              std::is_same_v<OutDevice, DeviceTags::Metal>,
+                              "Unsupported device type in Add EvalGroup");
             evalItem.m_outputHandle.SetData(std::move(out));
         }
     };
@@ -151,12 +153,13 @@ namespace NSCaseGen
             auto low_out = LowerAccess(out);
             ElementType* mem_out = low_out.MutableRawMemory();
 
-            static_assert(std::is_same_v<DeviceTypeFromHandle<TOutputHandle>, DeviceTags::CPU>, "Currently only CPU is supported");
+            using OutDevice = DeviceTypeFromHandle<TOutputHandle>;
 
-            for (size_t i = 0; i < count; ++i)
-            {
-                mem_out[i] = mem_in[i] + static_cast<ElementType>(evalItem.m_value);
-            }
+            if constexpr (std::is_same_v<OutDevice, DeviceTags::CPU> || std::is_same_v<OutDevice, DeviceTags::Metal>)
+                for (size_t i = 0; i < count; ++i)  mem_out[i] = mem_in[i] + static_cast<ElementType>(evalItem.m_value);
+            else  static_assert(std::is_same_v<OutDevice, DeviceTags::CPU> ||
+                              std::is_same_v<OutDevice, DeviceTags::Metal>,
+                              "Unsupported device type in AddWithNum EvalGroup");
             evalItem.m_outputHandle.SetData(std::move(out));
         }
     };

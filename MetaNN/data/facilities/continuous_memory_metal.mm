@@ -45,22 +45,16 @@ ContinuousMemory<TElem, DeviceTags::Metal>::ContinuousMemory(size_t p_size)
     , m_offset(0)
     , m_size(p_size)
 {
-    id<MTLDevice> device = MTLCreateSystemDefaultDevice();
-    if (!device)
-    {
-        throw std::runtime_error("Metal device not available.");
-    }
+    if (p_size == 0)  throw std::runtime_error("Metal ContinuousMemory allocated with size 0");
 
-    m_impl->buffer =
-        [device newBufferWithLength:sizeof(TElem) * p_size
+    id<MTLDevice> device = MTLCreateSystemDefaultDevice();
+    if (!device)  throw std::runtime_error("Metal device not available.");
+
+    m_impl->buffer = [device newBufferWithLength:sizeof(TElem) * p_size
                             options:MTLResourceStorageModeShared];
 
-    if (!m_impl->buffer)
-    {
-        throw std::runtime_error("Failed to allocate Metal buffer.");
-    }
+    if (!m_impl->buffer)  throw std::runtime_error("Failed to allocate Metal buffer.");
 }
-
 template<typename TElem>
 const TElem* ContinuousMemory<TElem, DeviceTags::Metal>::RawMemory() const
 {
@@ -85,3 +79,4 @@ void* ContinuousMemory<TElem, DeviceTags::Metal>::NativeHandle() const
 template class ContinuousMemory<float, DeviceTags::Metal>;
 template class ContinuousMemory<double, DeviceTags::Metal>;
 }
+

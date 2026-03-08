@@ -52,6 +52,7 @@ namespace MetaNN
     public:
         template <typename... TShapeParameter>
         explicit Tensor(TShapeParameter... shapes)
+              requires(sizeof...(TShapeParameter) > 0)
             : m_shape(shapes...)
             , m_mem(m_shape.Count())
         {}
