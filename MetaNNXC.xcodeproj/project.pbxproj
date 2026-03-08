@@ -56,6 +56,7 @@
 		08A32B6B2F5D355E00BE2DCE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08A32B6A2F5D355E00BE2DCE /* Foundation.framework */; };
 		08A32B6E2F5D356A00BE2DCE /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08A32B6C2F5D356A00BE2DCE /* Metal.framework */; };
 		08A32B6F2F5D356A00BE2DCE /* MetalPerformanceShaders.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08A32B6D2F5D356A00BE2DCE /* MetalPerformanceShaders.framework */; };
+		08A32B712F5D404300BE2DCE /* metal_copy.mm in Sources */ = {isa = PBXBuildFile; fileRef = 08A32B702F5D404300BE2DCE /* metal_copy.mm */; };
 		08CE81D72EEFAA2000A7AE01 /* test_tensor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC37D2DFA90C500C6E24A /* test_tensor.cpp */; };
 		08CE81DE2EEFAA6800A7AE01 /* test_compose_kenrel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC4FF2DFCBB0600C6E24A /* test_compose_kenrel.cpp */; };
 		08CE81DF2EEFAA8700A7AE01 /* test_add_layer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC5392DFCBB0600C6E24A /* test_add_layer.cpp */; };
@@ -297,6 +298,8 @@
 		08A32B6A2F5D355E00BE2DCE /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		08A32B6C2F5D356A00BE2DCE /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
 		08A32B6D2F5D356A00BE2DCE /* MetalPerformanceShaders.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalPerformanceShaders.framework; path = System/Library/Frameworks/MetalPerformanceShaders.framework; sourceTree = SDKROOT; };
+		08A32B702F5D404300BE2DCE /* metal_copy.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = metal_copy.mm; sourceTree = "<group>"; };
+		08A32B722F5D406900BE2DCE /* metal_copy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = metal_copy.h; sourceTree = "<group>"; };
 		08CE82AD2EEFB0F800A7AE01 /* MetalSwift.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MetalSwift.xcodeproj; path = MetalSwift/MetalSwift.xcodeproj; sourceTree = "<group>"; };
 		08DDC3752DFA90C500C6E24A /* _.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _.h; sourceTree = "<group>"; };
 		08DDC3762DFA90C500C6E24A /* test_shape.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_shape.cpp; sourceTree = "<group>"; };
@@ -510,6 +513,8 @@
 			isa = PBXGroup;
 			children = (
 				089303702E14AF07009341A6 /* data_copy.h */,
+				08A32B702F5D404300BE2DCE /* metal_copy.mm */,
+				08A32B722F5D406900BE2DCE /* metal_copy.h */,
 			);
 			path = data_copy;
 			sourceTree = "<group>";
@@ -1388,6 +1393,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				08A32B692F5D352D00BE2DCE /* continuous_memory_metal.mm in Sources */,
+				08A32B712F5D404300BE2DCE /* metal_copy.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
