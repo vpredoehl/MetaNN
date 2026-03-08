@@ -6,5 +6,6 @@ namespace MetaNN
     namespace DeviceTags
     {
         struct CPU;
+        struct Metal;
     };
 }

@@ -4,6 +4,12 @@
 #include <MetaNN/facilities/traits.h>
 #include <cassert>
 
+#include <cstddef>
+#include <memory>
+#include <type_traits>
+#include <stdexcept>
+
+
 namespace MetaNN
 {
 template <typename TElem, typename TDevice>
@@ -60,4 +66,27 @@ private:
     std::shared_ptr<ElementType> m_mem;
     size_t m_size;
 };
+
+
+template<typename TElem>
+class ContinuousMemory<TElem, DeviceTags::Metal>
+{
+public:
+    explicit ContinuousMemory(size_t p_size);
+    ContinuousMemory Shift(size_t pos) const;
+
+    const TElem* RawMemory() const;
+    TElem* MutableRawMemory();
+
+    bool IsShared() const;
+    size_t Size() const;
+
+private:
+    struct Impl;
+    std::shared_ptr<Impl> m_impl;
+    size_t m_offset = 0;
+    size_t m_size = 0;
+};
 }
+
+

@@ -212,7 +212,7 @@ namespace MetaNN
 
         TElement* MutableRawMemory()
         {
-            return m_data.m_mem.RawMemory();
+            return m_data.m_mem.MutableRawMemory();
         }
 
         const TElement* RawMemory() const
