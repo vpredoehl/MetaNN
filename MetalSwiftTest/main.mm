@@ -4,42 +4,54 @@
 //
 //  Created by Vincent Predoehl on 3/7/26.
 //
-#import <Metal/Metal.h>
 #include <iostream>
 #include <MetaNN/meta_nn.h>
+#include <MetaNN/metal/metal_add.h>
 
 using namespace MetaNN;
 
 int main()
 {
-    const size_t rows = 2;
-    const size_t cols = 3;
+    Matrix<float, DeviceTags::CPU> a_cpu(2, 3);
+    Matrix<float, DeviceTags::CPU> b_cpu(2, 3);
+    Matrix<float, DeviceTags::Metal> a_gpu(2, 3);
+    Matrix<float, DeviceTags::Metal> b_gpu(2, 3);
+    Matrix<float, DeviceTags::Metal> c_gpu(2, 3);
+    Matrix<float, DeviceTags::CPU> c_cpu(2, 3);
 
-    Matrix<float, DeviceTags::Metal> src(rows, cols);
-    Matrix<float, DeviceTags::Metal> dst(rows, cols);
+    auto a_mem = LowerAccess(a_cpu);
+    auto b_mem = LowerAccess(b_cpu);
 
-    auto mem_src = LowerAccess(src);
-    auto mem_dst = LowerAccess(dst);
-
-    float* src_ptr = mem_src.MutableRawMemory();
-    for (size_t i = 0; i < rows * cols; ++i)
+    for (size_t i = 0; i < 6; ++i)
     {
-        src_ptr[i] = static_cast<float>(i + 1);
+        a_mem.MutableRawMemory()[i] = float(i + 1);        // 1 2 3 4 5 6
+        b_mem.MutableRawMemory()[i] = float((i + 1) * 10); // 10 20 30 40 50 60
     }
 
-    DataCopy(src, dst);
+    DataCopy(a_cpu, a_gpu);
+    DataCopy(b_cpu, b_gpu);
 
-    const float* dst_ptr = mem_dst.RawMemory();
+    auto a_gpu_mem = LowerAccess(a_gpu);
+    auto b_gpu_mem = LowerAccess(b_gpu);
+    auto c_gpu_mem = LowerAccess(c_gpu);
 
-    std::cout << "Destination matrix:\n";
-    for (size_t i = 0; i < rows * cols; ++i)
+    const auto a_gpu_shared = a_gpu_mem.SharedMemory();
+    const auto b_gpu_shared = b_gpu_mem.SharedMemory();
+    auto c_gpu_shared = c_gpu_mem.SharedMemory();
+
+    NSMetalAdd::Add(a_gpu_shared,
+                    b_gpu_shared,
+                    c_gpu_shared,
+                    6);
+
+    DataCopy(c_gpu, c_cpu);
+
+    auto c_mem = LowerAccess(c_cpu);
+    for (size_t i = 0; i < 6; ++i)
     {
-        std::cout << dst_ptr[i] << " ";
-        if ((i + 1) % cols == 0)
-        {
-            std::cout << '\n';
-        }
+        std::cout << c_mem.RawMemory()[i] << " ";
     }
+    std::cout << '\n';
 
     return 0;
 }

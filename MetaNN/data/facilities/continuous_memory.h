@@ -31,10 +31,8 @@ public:
                                 m_size - pos);
     }
     
-    auto RawMemory() const
-    {
-        return m_mem.get();
-    }
+    auto RawMemory() const  { return m_mem.get(); }
+    TElem* MutableRawMemory() { return m_mem.get();  }
 
     bool IsShared() const
     {
@@ -77,10 +75,9 @@ public:
 
     const TElem* RawMemory() const;
     TElem* MutableRawMemory();
-
     bool IsShared() const;
     size_t Size() const;
-
+    void* NativeHandle() const;
 private:
     struct Impl;
     std::shared_ptr<Impl> m_impl;

@@ -75,6 +75,12 @@ TElem* ContinuousMemory<TElem, DeviceTags::Metal>::MutableRawMemory()
         static_cast<char*>([m_impl->buffer contents])) + m_offset;
 }
 
+template<typename TElem>
+void* ContinuousMemory<TElem, DeviceTags::Metal>::NativeHandle() const
+{
+    return (__bridge void*)m_impl->buffer;
+}
+
 // explicit instantiations
 template class ContinuousMemory<float, DeviceTags::Metal>;
 template class ContinuousMemory<double, DeviceTags::Metal>;

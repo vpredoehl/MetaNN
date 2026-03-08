@@ -407,6 +407,11 @@
 			path = MetalSwiftTest;
 			sourceTree = "<group>";
 		};
+		08A32B732F5D480900BE2DCE /* metal */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = metal;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -854,6 +859,7 @@
 				089303CE2E14AF07009341A6 /* model */,
 				089303FF2E14AF07009341A6 /* operation */,
 				089304052E14AF07009341A6 /* policies */,
+				08A32B732F5D480900BE2DCE /* metal */,
 				089304062E14AF07009341A6 /* meta_nn.h */,
 			);
 			path = MetaNN;
@@ -1217,6 +1223,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				08A32B542F5D2B9F00BE2DCE /* MetalSwiftTest */,
+				08A32B732F5D480900BE2DCE /* metal */,
 			);
 			name = MetalSwiftTest;
 			packageProductDependencies = (
