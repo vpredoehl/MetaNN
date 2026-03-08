@@ -2,42 +2,79 @@
 
 #include <MetaNN/data/_.h>
 #include <stdexcept>
-#include "metal_copy.h"
+#include <cstring>
 
 namespace MetaNN
 {
-template <typename TElem>
-void DataCopy(const Matrix<TElem, DeviceTags::CPU>& src,
-              Matrix<TElem, DeviceTags::CPU>& dst)
-{
-    if (src.Shape() != dst.Shape())
+    template <typename TElem>
+    void DataCopy(const Matrix<TElem, DeviceTags::CPU>& src,
+                  Matrix<TElem, DeviceTags::CPU>& dst)
     {
-        throw std::runtime_error("Error in data-copy: Matrix dimension mismatch.");
-    }
-    
-    const auto mem_src = LowerAccess(src);
-    auto mem_dst = LowerAccess(dst);
-
-    const TElem* r1 = mem_src.RawMemory();
-    TElem* r = mem_dst.MutableRawMemory();
+        if (src.Shape() != dst.Shape())
+        {
+            throw std::runtime_error("Error in data-copy: Matrix dimension mismatch.");
+        }
         
-    memcpy(r, r1, sizeof(TElem) * src.Shape().Count());
-}
+        const auto mem_src = LowerAccess(src);
+        auto mem_dst = LowerAccess(dst);
 
-template <typename TElem>
-void DataCopy(const Matrix<TElem, DeviceTags::Metal>& src,
-              Matrix<TElem, DeviceTags::Metal>& dst)
-{
-    if (src.Shape() != dst.Shape())
-    {
-        throw std::runtime_error("Error in data-copy: Matrix dimension mismatch.");
+        const TElem* r1 = mem_src.RawMemory();
+        TElem* r = mem_dst.MutableRawMemory();
+            
+        memcpy(r, r1, sizeof(TElem) * src.Shape().Count());
     }
 
-    const auto mem_src = LowerAccess(src);
-    auto mem_dst = LowerAccess(dst);
+    template <typename TElem>
+    void DataCopy(const Matrix<TElem, DeviceTags::Metal>& src,
+                  Matrix<TElem, DeviceTags::Metal>& dst)
+    {
+      if (src.Shape() != dst.Shape())
+      {
+        throw std::runtime_error("Error in data-copy: Matrix dimension mismatch.");
+      }
+      
+      const auto mem_src = LowerAccess(src);
+      auto mem_dst = LowerAccess(dst);
+      
+      const TElem* r1 = mem_src.RawMemory();
+      TElem* r = mem_dst.MutableRawMemory();
+      
+      memcpy(r, r1, sizeof(TElem) * src.Shape().Count());
+    }
 
-  const TElem* r1 = mem_src.RawMemory();
-  TElem* r = mem_dst.MutableRawMemory();
+    template <typename TElem>
+    void DataCopy(const Matrix<TElem, DeviceTags::CPU>& src,
+                  Matrix<TElem, DeviceTags::Metal>& dst)
+    {
+        if (src.Shape() != dst.Shape())
+        {
+            throw std::runtime_error("Error in data-copy: Matrix dimension mismatch.");
+        }
 
-  memcpy(r, r1, sizeof(TElem) * src.Shape().Count());}
+        const auto mem_src = LowerAccess(src);
+        auto mem_dst = LowerAccess(dst);
+
+        const TElem* r1 = mem_src.RawMemory();
+        TElem* r = mem_dst.MutableRawMemory();
+
+        memcpy(r, r1, sizeof(TElem) * src.Shape().Count());
+    }
+
+    template <typename TElem>
+    void DataCopy(const Matrix<TElem, DeviceTags::Metal>& src,
+                  Matrix<TElem, DeviceTags::CPU>& dst)
+    {
+        if (src.Shape() != dst.Shape())
+        {
+            throw std::runtime_error("Error in data-copy: Matrix dimension mismatch.");
+        }
+
+        const auto mem_src = LowerAccess(src);
+        auto mem_dst = LowerAccess(dst);
+
+        const TElem* r1 = mem_src.RawMemory();
+        TElem* r = mem_dst.MutableRawMemory();
+
+        memcpy(r, r1, sizeof(TElem) * src.Shape().Count());
+    }
 }
