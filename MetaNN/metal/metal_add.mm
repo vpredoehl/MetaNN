@@ -33,22 +33,39 @@ namespace MetaNN::NSMetalAdd
             return lib;
         }
 
-        id<MTLComputePipelineState> GetPipeline()
+        id<MTLComputePipelineState> GetPipeline(NSString* fnName)
         {
-            static id<MTLComputePipelineState> pso = nil;
+            static NSMutableDictionary<NSString*, id<MTLComputePipelineState>>* cache = nil;
             static dispatch_once_t onceToken;
             dispatch_once(&onceToken, ^
             {
-                NSError* error = nil;
-                id<MTLFunction> fn = [GetLibrary() newFunctionWithName:@"vector_add_f32"];
-                pso = [GetDevice() newComputePipelineStateWithFunction:fn error:&error];
-                if (!pso)
-                {
-                    @throw [NSException exceptionWithName:@"MetalAdd"
-                                                   reason:error.localizedDescription
-                                                 userInfo:nil];
-                }
+                cache = [[NSMutableDictionary alloc] init];
             });
+
+            id<MTLComputePipelineState> pso = cache[fnName];
+            if (pso)
+            {
+                return pso;
+            }
+
+            NSError* error = nil;
+            id<MTLFunction> fn = [GetLibrary() newFunctionWithName:fnName];
+            if (!fn)
+            {
+                @throw [NSException exceptionWithName:@"MetalAdd"
+                                               reason:[NSString stringWithFormat:@"Missing Metal function %@", fnName]
+                                             userInfo:nil];
+            }
+
+            pso = [GetDevice() newComputePipelineStateWithFunction:fn error:&error];
+            if (!pso)
+            {
+                @throw [NSException exceptionWithName:@"MetalAdd"
+                                               reason:error.localizedDescription
+                                             userInfo:nil];
+            }
+
+            cache[fnName] = pso;
             return pso;
         }
 
@@ -57,6 +74,75 @@ namespace MetaNN::NSMetalAdd
         {
             return (__bridge id<MTLBuffer>)mem.NativeHandle();
         }
+
+        void DispatchBinary(NSString* fnName,
+                            const ContinuousMemory<float, DeviceTags::Metal>& a,
+                            const ContinuousMemory<float, DeviceTags::Metal>& b,
+                            ContinuousMemory<float, DeviceTags::Metal>& c,
+                            size_t count)
+        {
+            @autoreleasepool
+            {
+                id<MTLCommandBuffer> cmd = [GetQueue() commandBuffer];
+                id<MTLComputeCommandEncoder> enc = [cmd computeCommandEncoder];
+                id<MTLComputePipelineState> pso = GetPipeline(fnName);
+
+                id<MTLBuffer> bufA = BufferOf(a);
+                id<MTLBuffer> bufB = BufferOf(b);
+                id<MTLBuffer> bufC = BufferOf(c);
+                uint n = (uint)count;
+
+                [enc setComputePipelineState:pso];
+                [enc setBuffer:bufA offset:0 atIndex:0];
+                [enc setBuffer:bufB offset:0 atIndex:1];
+                [enc setBuffer:bufC offset:0 atIndex:2];
+                [enc setBytes:&n length:sizeof(n) atIndex:3];
+
+                MTLSize grid = MTLSizeMake(count, 1, 1);
+                NSUInteger w = pso.maxTotalThreadsPerThreadgroup;
+                if (w > count) w = count;
+                if (w == 0) w = 1;
+                MTLSize group = MTLSizeMake(w, 1, 1);
+
+                [enc dispatchThreads:grid threadsPerThreadgroup:group];
+                [enc endEncoding];
+                [cmd commit];
+                [cmd waitUntilCompleted];
+            }
+        }
+
+        void DispatchUnary(NSString* fnName,
+                           const ContinuousMemory<float, DeviceTags::Metal>& a,
+                           ContinuousMemory<float, DeviceTags::Metal>& c,
+                           size_t count)
+        {
+            @autoreleasepool
+            {
+                id<MTLCommandBuffer> cmd = [GetQueue() commandBuffer];
+                id<MTLComputeCommandEncoder> enc = [cmd computeCommandEncoder];
+                id<MTLComputePipelineState> pso = GetPipeline(fnName);
+
+                id<MTLBuffer> bufA = BufferOf(a);
+                id<MTLBuffer> bufC = BufferOf(c);
+                uint n = (uint)count;
+
+                [enc setComputePipelineState:pso];
+                [enc setBuffer:bufA offset:0 atIndex:0];
+                [enc setBuffer:bufC offset:0 atIndex:1];
+                [enc setBytes:&n length:sizeof(n) atIndex:2];
+
+                MTLSize grid = MTLSizeMake(count, 1, 1);
+                NSUInteger w = pso.maxTotalThreadsPerThreadgroup;
+                if (w > count) w = count;
+                if (w == 0) w = 1;
+                MTLSize group = MTLSizeMake(w, 1, 1);
+
+                [enc dispatchThreads:grid threadsPerThreadgroup:group];
+                [enc endEncoding];
+                [cmd commit];
+                [cmd waitUntilCompleted];
+            }
+        }
     }
 
     void Add(const ContinuousMemory<float, DeviceTags::Metal>& a,
@@ -64,34 +150,42 @@ namespace MetaNN::NSMetalAdd
              ContinuousMemory<float, DeviceTags::Metal>& c,
              size_t count)
     {
-        @autoreleasepool
-        {
-            id<MTLCommandBuffer> cmd = [GetQueue() commandBuffer];
-            id<MTLComputeCommandEncoder> enc = [cmd computeCommandEncoder];
-            id<MTLComputePipelineState> pso = GetPipeline();
+        DispatchBinary(@"vector_add_f32", a, b, c, count);
+    }
 
-            id<MTLBuffer> bufA = BufferOf(a);
-            id<MTLBuffer> bufB = BufferOf(b);
-            id<MTLBuffer> bufC = BufferOf(c);
+    void Sub(const ContinuousMemory<float, DeviceTags::Metal>& a,
+             const ContinuousMemory<float, DeviceTags::Metal>& b,
+             ContinuousMemory<float, DeviceTags::Metal>& c,
+             size_t count)
+    {
+        DispatchBinary(@"vector_sub_f32", a, b, c, count);
+    }
 
-            uint n = (uint)count;
+    void Neg(const ContinuousMemory<float, DeviceTags::Metal>& a,
+             ContinuousMemory<float, DeviceTags::Metal>& c,
+             size_t count)
+    {
+        DispatchUnary(@"vector_neg_f32", a, c, count);
+    }
 
-            [enc setComputePipelineState:pso];
-            [enc setBuffer:bufA offset:0 atIndex:0];
-            [enc setBuffer:bufB offset:0 atIndex:1];
-            [enc setBuffer:bufC offset:0 atIndex:2];
-            [enc setBytes:&n length:sizeof(n) atIndex:3];
+    void Tanh(const ContinuousMemory<float, DeviceTags::Metal>& a,
+              ContinuousMemory<float, DeviceTags::Metal>& c,
+              size_t count)
+    {
+        DispatchUnary(@"vector_tanh_f32", a, c, count);
+    }
 
-            MTLSize grid = MTLSizeMake(count, 1, 1);
-            NSUInteger w = pso.maxTotalThreadsPerThreadgroup;
-            if (w > count) w = count;
-            MTLSize group = MTLSizeMake(w, 1, 1);
+    void Sigmoid(const ContinuousMemory<float, DeviceTags::Metal>& a,
+                 ContinuousMemory<float, DeviceTags::Metal>& c,
+                 size_t count)
+    {
+        DispatchUnary(@"vector_sigmoid_f32", a, c, count);
+    }
 
-            [enc dispatchThreads:grid
-          threadsPerThreadgroup:group];
-            [enc endEncoding];
-            [cmd commit];
-            [cmd waitUntilCompleted];
-        }
+    void Exp(const ContinuousMemory<float, DeviceTags::Metal>& a,
+             ContinuousMemory<float, DeviceTags::Metal>& c,
+             size_t count)
+    {
+        DispatchUnary(@"vector_exp_f32", a, c, count);
     }
 }
