@@ -92,8 +92,8 @@ namespace MetaNN
         template <typename... TPosParams>
         ElementType operator()(TPosParams... posParams) const
         {
-            static_assert(std::is_same_v<DeviceType, DeviceTags::CPU>,
-                          "Only CPU supports this method.");
+            static_assert(std::is_same_v<DeviceType, DeviceTags::CPU> || std::is_same_v<DeviceType, DeviceTags::Metal>,
+                          "Only CPU  or GPU supports this method.");
             size_t gap = 1;
             auto [pos, _] = NSTensor::OffsetAndVal(m_shape, gap, posParams..., ElementType{});
             return (m_mem.RawMemory())[pos];

@@ -56,12 +56,12 @@ namespace OperTanh::NSCaseGen
             auto low_out = LowerAccess(out);
             ElementType* mem_out = low_out.MutableRawMemory();
                 
-            static_assert(std::is_same_v<DeviceTypeFromHandle<TOutputHandle>, DeviceTags::CPU>, "Currently only CPU is supported");
-
-            for (size_t i = 0; i < count; ++i)
-            {
-                mem_out[i] = (ElementType)(tanh(mem_in[i]));
-            }
+            using OutDevice = DeviceTypeFromHandle<TOutputHandle>;
+            if constexpr (std::is_same_v<OutDevice, DeviceTags::CPU> || std::is_same_v<OutDevice, DeviceTags::Metal>)
+#pragma omp parallel for
+                for (size_t i = 0; i < count; ++i)  mem_out[i] = static_cast<ElementType>(std::tanh(mem_in[i]));
+            else static_assert(std::is_same_v<OutDevice, DeviceTags::CPU> || std::is_same_v<OutDevice, DeviceTags::Metal>,
+                  "Unsupported device type in Tanh EvalGroup");
             evalItem.m_outputHandle.SetData(std::move(out));
         }
     };
@@ -133,11 +133,18 @@ namespace OperTanhGrad::NSCaseGen
             auto low_out = LowerAccess(out);
             ElementType* mem_out = low_out.MutableRawMemory();
 
-            static_assert(std::is_same_v<DeviceTypeFromHandle<TOutputHandle>, DeviceTags::CPU>, "Currently only CPU is supported");
-        
-            for (size_t i = 0; i < count; ++i)
+            using OutDevice = DeviceTypeFromHandle<TOutputHandle>;
+            if constexpr (std::is_same_v<OutDevice, DeviceTags::CPU> || std::is_same_v<OutDevice, DeviceTags::Metal>)
             {
-                mem_out[i] = mem_grad[i % grad_count] * (1 - mem_in[i] * mem_in[i]);
+                for (size_t i = 0; i < count; ++i)
+                {
+                    mem_out[i] = mem_grad[i % grad_count] * (1 - mem_in[i] * mem_in[i]);
+                }
+            }
+            else
+            {
+                static_assert(std::is_same_v<OutDevice, DeviceTags::CPU> || std::is_same_v<OutDevice, DeviceTags::Metal>,
+                              "Unsupported device type in TanhGrad EvalGroup");
             }
             evalItem.m_outputHandle.SetData(std::move(out));
         }

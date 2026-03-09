@@ -50,6 +50,16 @@ namespace
         p[3] = v10; p[4] = v11; p[5] = v12;
     }
 
+    void Fill2x3(Matrix<float, DeviceTags::Metal>& m,
+                 float v00, float v01, float v02,
+                 float v10, float v11, float v12)
+    {
+        // Fill using a CPU temporary then copy to Metal
+        Matrix<float, DeviceTags::CPU> tmp(2, 3);
+        Fill2x3(tmp, v00, v01, v02, v10, v11, v12);
+        DataCopy(tmp, m);
+    }
+
     void Check2x3(const Matrix<float, DeviceTags::CPU>& m,
                   float v00, float v01, float v02,
                   float v10, float v11, float v12)
@@ -125,6 +135,27 @@ namespace
 
 int main()
 {
+  {
+    Matrix<float, DeviceTags::Metal> a(2,3);
+    
+    Fill2x3(a, 0, 1, 2, 3, 4, 5);
+    
+    auto expr = Tanh(a);
+    
+    auto r = Evaluate(expr);
+    printMatrix("r", r);
+  }
+  {
+    Matrix<float, DeviceTags::Metal> a(2,3);
+    
+    Fill2x3(a, 0, 1, 2, 3, 4, 5);
+    
+    auto expr = Sigmoid(a);
+    
+    auto r = Evaluate(expr);
+    printMatrix("r", r);
+  }
+
   Matrix<float, DeviceTags::Metal> a(2, 3);
   Matrix<float, DeviceTags::Metal> b(2, 3);
 
