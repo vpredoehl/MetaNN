@@ -131,6 +131,64 @@ namespace
 
         std::cout << "done" << std::endl;
     }
+
+    void TestSubstractLazyEvaluationMetal()
+    {
+        std::cout << "Test substract lazy evaluation (Metal)\t";
+
+        Matrix<float, DeviceTags::Metal> a(2, 3);
+        Matrix<float, DeviceTags::Metal> b(2, 3);
+        Matrix<float, DeviceTags::CPU> a_cpu(2, 3);
+        Matrix<float, DeviceTags::CPU> b_cpu(2, 3);
+
+        // Initial values
+        Fill2x3(a_cpu,
+                1, 2, 3,
+                4, 5, 6);
+
+        Fill2x3(b_cpu,
+                10, 20, 30,
+                40, 50, 60);
+
+        DataCopy(a_cpu, a);
+        DataCopy(b_cpu, b);
+
+        // Build expression only. This should be lazy.
+        auto op = a - b;
+
+        static_assert(IsMatrix<decltype(op)>);
+
+        // If shape metadata is available before evaluation, this should work.
+        assert(op.Shape()[0] == 2);
+        assert(op.Shape()[1] == 3);
+
+        // Mutate inputs AFTER expression creation.
+        // If substract is lazy, Evaluate(op) should see THESE values, not the old ones.
+        Fill2x3(a_cpu,
+                100, 200, 300,
+                400, 500, 600);
+
+        Fill2x3(b_cpu,
+                1, 2, 3,
+                4, 5, 6);
+
+        DataCopy(a_cpu, a);
+        DataCopy(b_cpu, b);
+
+        auto res = Evaluate(op);
+        Matrix<float, DeviceTags::CPU> res_cpu(2, 3);
+        DataCopy(res, res_cpu);
+
+        static_assert(IsMatrix<decltype(res)>);
+        assert(res.Shape()[0] == 2);
+        assert(res.Shape()[1] == 3);
+
+        Check2x3(res_cpu,
+                 99, 198, 297,
+                 396, 495, 594);
+
+        std::cout << "test metal subtract done" << std::endl;
+    }
 }
 
 int main()
@@ -140,7 +198,7 @@ int main()
     
     Fill2x3(a, 0, 1, 2, 3, 4, 5);
     
-    auto expr = Tanh(a);
+    auto expr = ReLU(a);
     
     auto r = Evaluate(expr);
     printMatrix("r", r);
@@ -150,12 +208,12 @@ int main()
     
     Fill2x3(a, 0, 1, 2, 3, 4, 5);
     
-    auto expr = Sigmoid(a);
+    auto expr = Softmax(a);
     
     auto r = Evaluate(expr);
     printMatrix("r", r);
   }
-
+ 
   Matrix<float, DeviceTags::Metal> a(2, 3);
   Matrix<float, DeviceTags::Metal> b(2, 3);
 
@@ -178,11 +236,14 @@ int main()
 
   // Evaluate when needed
   auto c_gpu = Evaluate(c_expr);
+  
+  
   Matrix<float, DeviceTags::CPU> c_cpu2(2, 3);
   DataCopy(c_gpu, c_cpu2);
   printMatrix("c", c_cpu2);
   
   TestAddLazyEvaluationMetal();
+  TestSubstractLazyEvaluationMetal();
 
   Matrix<float, DeviceTags::CPU> a_cpu(2, 3);
     Matrix<float, DeviceTags::CPU> b_cpu(2, 3);
@@ -193,6 +254,27 @@ int main()
 
     auto a_mem = LowerAccess(a_cpu);
     auto b_mem = LowerAccess(b_cpu);
+  {
+      Matrix<float, DeviceTags::Metal> a(2, 3);
+      Matrix<float, DeviceTags::CPU> r_cpu(2, 3);
+
+      Fill2x3(a,
+              -1, 0, 1,
+              2, 3, 4);
+
+      DataCopy(Evaluate(-a), r_cpu);
+      printMatrix("neg", r_cpu);
+
+      DataCopy(Evaluate(Tanh(a)), r_cpu);
+      printMatrix("tanh", r_cpu);
+
+      DataCopy(Evaluate(Sigmoid(a)), r_cpu);
+      printMatrix("sigmoid", r_cpu);
+
+      DataCopy(Evaluate(Exp(a)), r_cpu);
+      printMatrix("exp", r_cpu);
+  }
+  
 
     for (size_t i = 0; i < 6; ++i)
     {
