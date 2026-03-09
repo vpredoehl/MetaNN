@@ -57,6 +57,7 @@
 		08A32B6E2F5D356A00BE2DCE /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08A32B6C2F5D356A00BE2DCE /* Metal.framework */; };
 		08A32B6F2F5D356A00BE2DCE /* MetalPerformanceShaders.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08A32B6D2F5D356A00BE2DCE /* MetalPerformanceShaders.framework */; };
 		08A32B712F5D404300BE2DCE /* metal_copy.mm in Sources */ = {isa = PBXBuildFile; fileRef = 08A32B702F5D404300BE2DCE /* metal_copy.mm */; };
+		08A32C172F5E437800BE2DCE /* matmul.h in Sources */ = {isa = PBXBuildFile; fileRef = 08A32C162F5E437600BE2DCE /* matmul.h */; };
 		08CE81D72EEFAA2000A7AE01 /* test_tensor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC37D2DFA90C500C6E24A /* test_tensor.cpp */; };
 		08CE81DE2EEFAA6800A7AE01 /* test_compose_kenrel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC4FF2DFCBB0600C6E24A /* test_compose_kenrel.cpp */; };
 		08CE81DF2EEFAA8700A7AE01 /* test_add_layer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC5392DFCBB0600C6E24A /* test_add_layer.cpp */; };
@@ -300,6 +301,7 @@
 		08A32B6D2F5D356A00BE2DCE /* MetalPerformanceShaders.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalPerformanceShaders.framework; path = System/Library/Frameworks/MetalPerformanceShaders.framework; sourceTree = SDKROOT; };
 		08A32B702F5D404300BE2DCE /* metal_copy.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = metal_copy.mm; sourceTree = "<group>"; };
 		08A32B722F5D406900BE2DCE /* metal_copy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = metal_copy.h; sourceTree = "<group>"; };
+		08A32C162F5E437600BE2DCE /* matmul.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = matmul.h; sourceTree = "<group>"; };
 		08CE82AD2EEFB0F800A7AE01 /* MetalSwift.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MetalSwift.xcodeproj; path = MetalSwift/MetalSwift.xcodeproj; sourceTree = "<group>"; };
 		08DDC3752DFA90C500C6E24A /* _.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _.h; sourceTree = "<group>"; };
 		08DDC3762DFA90C500C6E24A /* test_shape.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_shape.cpp; sourceTree = "<group>"; };
@@ -756,6 +758,7 @@
 		089303EB2E14AF07009341A6 /* math */ = {
 			isa = PBXGroup;
 			children = (
+				08A32C162F5E437600BE2DCE /* matmul.h */,
 				089303D72E14AF07009341A6 /* _.h */,
 				089303D82E14AF07009341A6 /* abs.h */,
 				089303D92E14AF07009341A6 /* acos.h */,
@@ -1246,6 +1249,7 @@
 					};
 					08A32B522F5D2B9F00BE2DCE = {
 						CreatedOnToolsVersion = 26.3;
+						LastSwiftMigration = 2630;
 					};
 				};
 			};
@@ -1399,6 +1403,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				08A32C172F5E437800BE2DCE /* matmul.h in Sources */,
 				08A32B692F5D352D00BE2DCE /* continuous_memory_metal.mm in Sources */,
 				08A32B712F5D404300BE2DCE /* metal_copy.mm in Sources */,
 			);
@@ -1635,20 +1640,31 @@
 		08A32B572F5D2B9F00BE2DCE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				MACOSX_DEPLOYMENT_TARGET = 26.2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				USER_HEADER_SEARCH_PATHS = /Volumes/Darwin/MetaNN/MetalSwift/MetalBuffer;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+				USER_HEADER_SEARCH_PATHS = (
+					/Volumes/Darwin/MetaNN/MetalSwift/MetalBuffer,
+					"$(PROJECT_DIR)/MetaNN/**",
+				);
 			};
 			name = Debug;
 		};
 		08A32B582F5D2B9F00BE2DCE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				MACOSX_DEPLOYMENT_TARGET = 26.2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				USER_HEADER_SEARCH_PATHS = /Volumes/Darwin/MetaNN/MetalSwift/MetalBuffer;
+				SWIFT_VERSION = 6.0;
+				USER_HEADER_SEARCH_PATHS = (
+					/Volumes/Darwin/MetaNN/MetalSwift/MetalBuffer,
+					"$(PROJECT_DIR)/MetaNN/**",
+				);
 			};
 			name = Release;
 		};

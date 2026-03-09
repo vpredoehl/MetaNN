@@ -65,8 +65,9 @@ namespace OperatorMultiply::NSCaseGen
             auto low_out = LowerAccess(out);
             ElementType* mem_out = low_out.MutableRawMemory();
 
-            static_assert(std::is_same_v<DeviceTypeFromHandle<TOutputHandle>, DeviceTags::CPU>, "Currently only CPU is supported");
-
+          static_assert(std::is_same_v<DeviceTypeFromHandle<TOutputHandle>, DeviceTags::CPU> ||
+                          std::is_same_v<DeviceTypeFromHandle<TOutputHandle>, DeviceTags::Metal>,
+                          "Currently only CPU or Metal is supported");
             for (size_t i = 0; i < outCount; ++i)
             {
                 mem_out[i] = mem_in1[i % count1] * mem_in2[i % count2];

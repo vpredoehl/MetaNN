@@ -17,3 +17,5 @@
 #include <MetaNN/operation/math/substract.h>
 #include <MetaNN/operation/math/tan.h>
 #include <MetaNN/operation/math/tanh.h>
+#include "matmul.h"
+

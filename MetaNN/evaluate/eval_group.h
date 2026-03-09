@@ -3,6 +3,7 @@
 #include <MetaNN/evaluate/eval_item.h>
 #include <list>
 #include <memory>
+#include <stdexcept>
 
 namespace MetaNN
 {
@@ -27,8 +28,13 @@ namespace MetaNN
                 throw std::runtime_error("Cannot add to this group any more!");
             }
             BaseEvalItem* to = item.release();
-            auto aim = static_cast<TEvalItem*>(to);
-            m_evalItem = std::unique_ptr<TEvalItem>(aim);
+            auto aim = dynamic_cast<TEvalItem*>(to);
+            if (!aim)
+            {
+                delete to;
+                throw std::runtime_error("Incorrect eval item type for this group.");
+            }
+            m_evalItem.reset(aim);
         }
 
         void Eval() override final
@@ -44,7 +50,14 @@ namespace MetaNN
             {
                 throw std::runtime_error("No eval item added now.");
             }
-            return { m_evalItem->OutputPtr() };
+            const BaseEvalItem* base = dynamic_cast<const BaseEvalItem*>(m_evalItem.get());
+            if (!base)
+            {
+                throw std::runtime_error("Stored eval item type is incompatible with BaseEvalItem.");
+            }
+            std::list<const void*> res;
+            res.push_back(base->OutputPtr());
+            return res;
         }
 
     protected:
@@ -53,3 +66,4 @@ namespace MetaNN
         std::unique_ptr<TEvalItem> m_evalItem;
     };
 }
+
