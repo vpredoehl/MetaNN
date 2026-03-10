@@ -58,8 +58,8 @@
 		08A32B6F2F5D356A00BE2DCE /* MetalPerformanceShaders.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08A32B6D2F5D356A00BE2DCE /* MetalPerformanceShaders.framework */; };
 		08A32B712F5D404300BE2DCE /* metal_copy.mm in Sources */ = {isa = PBXBuildFile; fileRef = 08A32B702F5D404300BE2DCE /* metal_copy.mm */; };
 		08A32C172F5E437800BE2DCE /* matmul.h in Sources */ = {isa = PBXBuildFile; fileRef = 08A32C162F5E437600BE2DCE /* matmul.h */; };
-		08A330682F5FC22700BE2DCE /* continuous_memory_metal.mm in Sources */ = {isa = PBXBuildFile; fileRef = 08A32B682F5D350600BE2DCE /* continuous_memory_metal.mm */; };
-		08A330692F5FC22700BE2DCE /* metal_copy.mm in Sources */ = {isa = PBXBuildFile; fileRef = 08A32B702F5D404300BE2DCE /* metal_copy.mm */; };
+		08A331D92F5FCA1500BE2DCE /* continuous_memory_metal.mm in Sources */ = {isa = PBXBuildFile; fileRef = 08A32B682F5D350600BE2DCE /* continuous_memory_metal.mm */; };
+		08A331DA2F5FCA1500BE2DCE /* metal_copy.mm in Sources */ = {isa = PBXBuildFile; fileRef = 08A32B702F5D404300BE2DCE /* metal_copy.mm */; };
 		08CE81D72EEFAA2000A7AE01 /* test_tensor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC37D2DFA90C500C6E24A /* test_tensor.cpp */; };
 		08CE81DE2EEFAA6800A7AE01 /* test_compose_kenrel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC4FF2DFCBB0600C6E24A /* test_compose_kenrel.cpp */; };
 		08CE81DF2EEFAA8700A7AE01 /* test_add_layer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC5392DFCBB0600C6E24A /* test_add_layer.cpp */; };
@@ -312,6 +312,7 @@
 		08A32B722F5D406900BE2DCE /* metal_copy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = metal_copy.h; sourceTree = "<group>"; };
 		08A32C162F5E437600BE2DCE /* matmul.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = matmul.h; sourceTree = "<group>"; };
 		08A32FA02F5FC20900BE2DCE /* MetaNN.metallib */ = {isa = PBXFileReference; explicitFileType = "archive.metal-library"; includeInIndex = 0; path = MetaNN.metallib; sourceTree = BUILT_PRODUCTS_DIR; };
+		08A331D52F5FCA0200BE2DCE /* liblibMetaNN.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = liblibMetaNN.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		08CE82AD2EEFB0F800A7AE01 /* MetalSwift.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MetalSwift.xcodeproj; path = MetalSwift/MetalSwift.xcodeproj; sourceTree = "<group>"; };
 		08DDC3752DFA90C500C6E24A /* _.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _.h; sourceTree = "<group>"; };
 		08DDC3762DFA90C500C6E24A /* test_shape.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_shape.cpp; sourceTree = "<group>"; };
@@ -413,6 +414,24 @@
 		08DDC5CA2DFCBB2700C6E24A /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		08A331C62F5FC7C100BE2DCE /* Exceptions for "metal" folder in "MetaNN" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				matmul.metal,
+			);
+			target = 08A32F9F2F5FC20900BE2DCE /* MetaNN */;
+		};
+		08A331DD2F5FCA3300BE2DCE /* Exceptions for "metal" folder in "libMetaNN" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				metal_add.mm,
+				metal_matmul.mm,
+			);
+			target = 08A331D42F5FCA0200BE2DCE /* libMetaNN */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		08A32B542F5D2B9F00BE2DCE /* MetalSwiftTest */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
@@ -421,6 +440,10 @@
 		};
 		08A32B732F5D480900BE2DCE /* metal */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				08A331C62F5FC7C100BE2DCE /* Exceptions for "metal" folder in "MetaNN" target */,
+				08A331DD2F5FCA3300BE2DCE /* Exceptions for "metal" folder in "libMetaNN" target */,
+			);
 			path = metal;
 			sourceTree = "<group>";
 		};
@@ -464,6 +487,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		08A331D32F5FCA0200BE2DCE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -490,6 +520,7 @@
 				08095D862DFCBECB008D6698 /* OtherTests */,
 				08A32B532F5D2B9F00BE2DCE /* MetalSwiftTest */,
 				08A32FA02F5FC20900BE2DCE /* MetaNN.metallib */,
+				08A331D52F5FCA0200BE2DCE /* liblibMetaNN.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1171,6 +1202,16 @@
 		};
 /* End PBXGroup section */
 
+/* Begin PBXHeadersBuildPhase section */
+		08A331D12F5FCA0200BE2DCE /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
 /* Begin PBXNativeTarget section */
 		08095D4F2DFCBD0A008D6698 /* LayerTest */ = {
 			isa = PBXNativeTarget;
@@ -1273,6 +1314,25 @@
 			productReference = 08A32FA02F5FC20900BE2DCE /* MetaNN.metallib */;
 			productType = "com.apple.product-type.metal-library";
 		};
+		08A331D42F5FCA0200BE2DCE /* libMetaNN */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 08A331D62F5FCA0200BE2DCE /* Build configuration list for PBXNativeTarget "libMetaNN" */;
+			buildPhases = (
+				08A331D12F5FCA0200BE2DCE /* Headers */,
+				08A331D22F5FCA0200BE2DCE /* Sources */,
+				08A331D32F5FCA0200BE2DCE /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = libMetaNN;
+			packageProductDependencies = (
+			);
+			productName = libMetaNN;
+			productReference = 08A331D52F5FCA0200BE2DCE /* liblibMetaNN.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -1290,6 +1350,9 @@
 						LastSwiftMigration = 2630;
 					};
 					08A32F9F2F5FC20900BE2DCE = {
+						CreatedOnToolsVersion = 26.3;
+					};
+					08A331D42F5FCA0200BE2DCE = {
 						CreatedOnToolsVersion = 26.3;
 					};
 				};
@@ -1319,6 +1382,7 @@
 				08095D7D2DFCBECB008D6698 /* OtherTests */,
 				08A32B522F5D2B9F00BE2DCE /* MetalSwiftTest */,
 				08A32F9F2F5FC20900BE2DCE /* MetaNN */,
+				08A331D42F5FCA0200BE2DCE /* libMetaNN */,
 			);
 		};
 /* End PBXProject section */
@@ -1455,8 +1519,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				08A330682F5FC22700BE2DCE /* continuous_memory_metal.mm in Sources */,
-				08A330692F5FC22700BE2DCE /* metal_copy.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		08A331D22F5FCA0200BE2DCE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				08A331D92F5FCA1500BE2DCE /* continuous_memory_metal.mm in Sources */,
+				08A331DA2F5FCA1500BE2DCE /* metal_copy.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1747,6 +1818,28 @@
 			};
 			name = Release;
 		};
+		08A331D72F5FCA0200BE2DCE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				EXECUTABLE_PREFIX = lib;
+				MACOSX_DEPLOYMENT_TARGET = 26.2;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		08A331D82F5FCA0200BE2DCE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				EXECUTABLE_PREFIX = lib;
+				MACOSX_DEPLOYMENT_TARGET = 26.2;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1800,6 +1893,15 @@
 			buildConfigurations = (
 				08A32FA42F5FC20900BE2DCE /* Debug */,
 				08A32FA52F5FC20900BE2DCE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		08A331D62F5FCA0200BE2DCE /* Build configuration list for PBXNativeTarget "libMetaNN" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				08A331D72F5FCA0200BE2DCE /* Debug */,
+				08A331D82F5FCA0200BE2DCE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
