@@ -28,11 +28,33 @@ namespace MetaNN::NSMetalAdd
 
         id<MTLLibrary> GetLibrary()
         {
-            static id<MTLLibrary> lib =
-                [GetDevice() newDefaultLibrary];
+            static id<MTLLibrary> lib = nil;
+            static dispatch_once_t onceToken;
+            dispatch_once(&onceToken, ^
+            {
+                NSBundle *bundle = [NSBundle mainBundle];
+                NSURL *url = [bundle URLForResource:@"MetaNN" withExtension:@"metallib"];
+                if (!url)  @throw [NSException exceptionWithName:@"MetalAdd"
+                                                   reason:@"MetaNN.metallib not found in main bundle"
+                                                 userInfo:nil];
+    
+                NSError *error = nil;
+                if (@available(macOS 13.0, iOS 16.0, *))  lib = [GetDevice() newLibraryWithURL:url error:&error];
+                else  lib = [GetDevice() newLibraryWithURL:url error:&error];
+
+                if (!lib)
+                {
+                    NSString *reason =
+                        [NSString stringWithFormat:@"Failed to load MetaNN.metallib: %@",
+                                                   error.localizedDescription];
+                    @throw [NSException exceptionWithName:@"MetalAdd"
+                                                   reason:reason
+                                                 userInfo:nil];
+                }
+            });
             return lib;
         }
-
+    
         id<MTLComputePipelineState> GetPipeline(NSString* fnName)
         {
             static NSMutableDictionary<NSString*, id<MTLComputePipelineState>>* cache = nil;
@@ -189,3 +211,4 @@ namespace MetaNN::NSMetalAdd
         DispatchUnary(@"vector_exp_f32", a, c, count);
     }
 }
+

@@ -52,14 +52,12 @@
 		08095DBC2DFCC10C008D6698 /* test_policy_operations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC5C82DFCBB2700C6E24A /* test_policy_operations.cpp */; };
 		08095DBD2DFCC12B008D6698 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC5CA2DFCBB2700C6E24A /* main.cpp */; };
 		08A32B662F5D2BC300BE2DCE /* libMetalBuffer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 08A32B622F5D2B9F00BE2DCE /* libMetalBuffer.a */; };
-		08A32B692F5D352D00BE2DCE /* continuous_memory_metal.mm in Sources */ = {isa = PBXBuildFile; fileRef = 08A32B682F5D350600BE2DCE /* continuous_memory_metal.mm */; };
 		08A32B6B2F5D355E00BE2DCE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08A32B6A2F5D355E00BE2DCE /* Foundation.framework */; };
 		08A32B6E2F5D356A00BE2DCE /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08A32B6C2F5D356A00BE2DCE /* Metal.framework */; };
 		08A32B6F2F5D356A00BE2DCE /* MetalPerformanceShaders.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08A32B6D2F5D356A00BE2DCE /* MetalPerformanceShaders.framework */; };
-		08A32B712F5D404300BE2DCE /* metal_copy.mm in Sources */ = {isa = PBXBuildFile; fileRef = 08A32B702F5D404300BE2DCE /* metal_copy.mm */; };
-		08A32C172F5E437800BE2DCE /* matmul.h in Sources */ = {isa = PBXBuildFile; fileRef = 08A32C162F5E437600BE2DCE /* matmul.h */; };
 		08A331D92F5FCA1500BE2DCE /* continuous_memory_metal.mm in Sources */ = {isa = PBXBuildFile; fileRef = 08A32B682F5D350600BE2DCE /* continuous_memory_metal.mm */; };
 		08A331DA2F5FCA1500BE2DCE /* metal_copy.mm in Sources */ = {isa = PBXBuildFile; fileRef = 08A32B702F5D404300BE2DCE /* metal_copy.mm */; };
+		08A3370B2F5FD95F00BE2DCE /* liblibMetaNN.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 08A331D52F5FCA0200BE2DCE /* liblibMetaNN.a */; };
 		08CE81D72EEFAA2000A7AE01 /* test_tensor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC37D2DFA90C500C6E24A /* test_tensor.cpp */; };
 		08CE81DE2EEFAA6800A7AE01 /* test_compose_kenrel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC4FF2DFCBB0600C6E24A /* test_compose_kenrel.cpp */; };
 		08CE81DF2EEFAA8700A7AE01 /* test_add_layer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC5392DFCBB0600C6E24A /* test_add_layer.cpp */; };
@@ -113,6 +111,27 @@
 			remoteInfo = MetalBuffer;
 		};
 		08A330702F5FC2D000BE2DCE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08CE82AD2EEFB0F800A7AE01 /* MetalSwift.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 08A32A292F5D090F00BE2DCE;
+			remoteInfo = MetalBuffer;
+		};
+		08A334E52F5FD22200BE2DCE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0870E49B2D698BBC0097085B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 08A32F9F2F5FC20900BE2DCE;
+			remoteInfo = MetaNN;
+		};
+		08A334E72F5FD22200BE2DCE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0870E49B2D698BBC0097085B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 08A331D42F5FCA0200BE2DCE;
+			remoteInfo = libMetaNN;
+		};
+		08A334E92F5FD23E00BE2DCE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 08CE82AD2EEFB0F800A7AE01 /* MetalSwift.xcodeproj */;
 			proxyType = 1;
@@ -418,6 +437,7 @@
 		08A331C62F5FC7C100BE2DCE /* Exceptions for "metal" folder in "MetaNN" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				add.metal,
 				matmul.metal,
 			);
 			target = 08A32F9F2F5FC20900BE2DCE /* MetaNN */;
@@ -430,6 +450,16 @@
 			);
 			target = 08A331D42F5FCA0200BE2DCE /* libMetaNN */;
 		};
+		08A334E42F5FD21B00BE2DCE /* Exceptions for "metal" folder in "MetalSwiftTest" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				add.metal,
+				matmul.metal,
+				metal_add.mm,
+				metal_matmul.mm,
+			);
+			target = 08A32B522F5D2B9F00BE2DCE /* MetalSwiftTest */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -441,15 +471,11 @@
 		08A32B732F5D480900BE2DCE /* metal */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
+				08A334E42F5FD21B00BE2DCE /* Exceptions for "metal" folder in "MetalSwiftTest" target */,
 				08A331C62F5FC7C100BE2DCE /* Exceptions for "metal" folder in "MetaNN" target */,
 				08A331DD2F5FCA3300BE2DCE /* Exceptions for "metal" folder in "libMetaNN" target */,
 			);
 			path = metal;
-			sourceTree = "<group>";
-		};
-		08A32FA12F5FC20900BE2DCE /* MetaNN */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = MetaNN;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -480,10 +506,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				08A3370B2F5FD95F00BE2DCE /* liblibMetaNN.a in Frameworks */,
+				08A32B662F5D2BC300BE2DCE /* libMetalBuffer.a in Frameworks */,
 				08A32B6E2F5D356A00BE2DCE /* Metal.framework in Frameworks */,
 				08A32B6F2F5D356A00BE2DCE /* MetalPerformanceShaders.framework in Frameworks */,
 				08A32B6B2F5D355E00BE2DCE /* Foundation.framework in Frameworks */,
-				08A32B662F5D2BC300BE2DCE /* libMetalBuffer.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -506,7 +533,6 @@
 				08DDC55B2DFCBB0600C6E24A /* LayerTest */,
 				08DDC3A92DFA90C500C6E24A /* DataOpTest */,
 				08A32B542F5D2B9F00BE2DCE /* MetalSwiftTest */,
-				08A32FA12F5FC20900BE2DCE /* MetaNN */,
 				08C29A992EEBC6B6009ABB31 /* Frameworks */,
 				0870E4A42D698BBC0097085B /* Products */,
 			);
@@ -1281,6 +1307,9 @@
 			buildRules = (
 			);
 			dependencies = (
+				08A334EA2F5FD23E00BE2DCE /* PBXTargetDependency */,
+				08A334E62F5FD22200BE2DCE /* PBXTargetDependency */,
+				08A334E82F5FD22200BE2DCE /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				08A32B542F5D2B9F00BE2DCE /* MetalSwiftTest */,
@@ -1303,9 +1332,6 @@
 			);
 			dependencies = (
 				08A330712F5FC2D000BE2DCE /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				08A32FA12F5FC20900BE2DCE /* MetaNN */,
 			);
 			name = MetaNN;
 			packageProductDependencies = (
@@ -1509,9 +1535,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				08A32C172F5E437800BE2DCE /* matmul.h in Sources */,
-				08A32B692F5D352D00BE2DCE /* continuous_memory_metal.mm in Sources */,
-				08A32B712F5D404300BE2DCE /* metal_copy.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1538,6 +1561,21 @@
 			isa = PBXTargetDependency;
 			name = MetalBuffer;
 			targetProxy = 08A330702F5FC2D000BE2DCE /* PBXContainerItemProxy */;
+		};
+		08A334E62F5FD22200BE2DCE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 08A32F9F2F5FC20900BE2DCE /* MetaNN */;
+			targetProxy = 08A334E52F5FD22200BE2DCE /* PBXContainerItemProxy */;
+		};
+		08A334E82F5FD22200BE2DCE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 08A331D42F5FCA0200BE2DCE /* libMetaNN */;
+			targetProxy = 08A334E72F5FD22200BE2DCE /* PBXContainerItemProxy */;
+		};
+		08A334EA2F5FD23E00BE2DCE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = MetalBuffer;
+			targetProxy = 08A334E92F5FD23E00BE2DCE /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
