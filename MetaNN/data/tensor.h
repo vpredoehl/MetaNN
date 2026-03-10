@@ -79,14 +79,14 @@ namespace MetaNN
         template <typename... TPosValParams>
         void SetValue(TPosValParams... posValParams)
         {
-            static_assert(std::is_same_v<DeviceType, DeviceTags::CPU>,
-                          "Only CPU supports this method.");
+            static_assert(std::is_same_v<DeviceType, DeviceTags::CPU> || std::is_same_v<DeviceType, DeviceTags::Metal>,
+                          "Only CPU or GPU (Metal) supports this method.");
             static_assert(sizeof...(TPosValParams) == uDim + 1);
 
             assert(AvailableForWrite());
             size_t gap = 1;
             auto [pos, val] = NSTensor::OffsetAndVal(m_shape, gap, posValParams...);
-            (m_mem.RawMemory())[pos] = static_cast<ElementType>(val);
+            (m_mem.MutableRawMemory())[pos] = static_cast<ElementType>(val);
         }
         
         template <typename... TPosParams>
@@ -182,7 +182,7 @@ namespace MetaNN
         void SetValue(ElementType val)
         {
             assert(AvailableForWrite());
-            (m_mem.RawMemory())[0] = val;
+            (m_mem.MutableRawMemory())[0] = val;
         }
 
         auto Value() const noexcept
@@ -242,3 +242,4 @@ namespace MetaNN
     template <typename TElem, typename TDevice>
     using ThreeDArray = Tensor<TElem, TDevice, 3>;
 }
+

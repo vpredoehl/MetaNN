@@ -84,7 +84,7 @@ namespace MetaNN
                 auto low_out = LowerAccess(out);
                 ElementType* mem_out = low_out.MutableRawMemory();
 
-                static_assert(std::is_same_v<DeviceTypeFromHandle<TOutputHandle>, DeviceTags::CPU>, "Currently only CPU is supported");
+                static_assert(std::is_same_v<DeviceTypeFromHandle<TOutputHandle>, DeviceTags::CPU> || std::is_same_v<DeviceTypeFromHandle<TOutputHandle>, DeviceTags::Metal>, "Currently only CPU or Metal is supported");
                 
                 mem_out[0] = mem_in[0];
                 

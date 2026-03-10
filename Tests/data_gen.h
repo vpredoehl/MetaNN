@@ -7,7 +7,7 @@ inline auto GenTensor(TElem start, TElem step, TShapeParams... shapeParams)
 {
     using namespace MetaNN;
     constexpr size_t dim = sizeof...(shapeParams);
-    Tensor<TElem, MetaNN::DeviceTags::CPU, dim> res(shapeParams...);
+    Tensor<TElem, MetaNN::DeviceTags::Metal, dim> res(shapeParams...);
     auto lowLayer = LowerAccess(res);
     auto mem = lowLayer.MutableRawMemory();
     for (size_t i = 0; i < res.Shape().Count(); ++i)
@@ -23,7 +23,7 @@ inline auto FillTensor(TIt b, TShapeParams... shapeParams)
 {
     using namespace MetaNN;
     constexpr size_t dim = sizeof...(shapeParams);
-    Tensor<TElem, MetaNN::DeviceTags::CPU, dim> res(shapeParams...);
+    Tensor<TElem, MetaNN::DeviceTags::Metal, dim> res(shapeParams...);
     auto lowLayer = LowerAccess(res);
     auto mem = lowLayer.MutableRawMemory();
     for (size_t i = 0; i < res.Shape().Count(); ++i)
@@ -35,8 +35,8 @@ inline auto FillTensor(TIt b, TShapeParams... shapeParams)
 }
 
 template <typename TElem, size_t uDim>
-bool Compare(const MetaNN::Tensor<TElem, MetaNN::DeviceTags::CPU, uDim>& v1,
-             const MetaNN::Tensor<TElem, MetaNN::DeviceTags::CPU, uDim>& v2,
+bool Compare(const MetaNN::Tensor<TElem, MetaNN::DeviceTags::Metal, uDim>& v1,
+             const MetaNN::Tensor<TElem, MetaNN::DeviceTags::Metal, uDim>& v2,
              TElem availGap)
 {
     assert(v1.Shape() == v2.Shape());

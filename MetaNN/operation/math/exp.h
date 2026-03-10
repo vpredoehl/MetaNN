@@ -57,7 +57,7 @@ namespace OperExp::NSCaseGen
             ElementType* mem_out = low_out.MutableRawMemory();
 
             static_assert(std::is_same_v<DeviceTypeFromHandle<TOutputHandle>, DeviceTags::CPU> || std::is_same_v<DeviceTypeFromHandle<TOutputHandle>, DeviceTags::Metal>, "Currently only CPU or Metal is supported");
-#pragma omp prallel for
+#pragma omp parallel for
             for (size_t i = 0; i < count; ++i)  mem_out[i] = std::exp(mem_in[i]);
             evalItem.m_outputHandle.SetData(std::move(out));
         }

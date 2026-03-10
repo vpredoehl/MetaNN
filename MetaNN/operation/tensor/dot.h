@@ -7,6 +7,7 @@
 #include <MetaNN/policies/_.h>
 #include <cassert>
 #include <type_traits>
+#include <stdexcept>
 
 namespace MetaNN::OpTags
 {
@@ -65,28 +66,25 @@ namespace OperDot::NSCaseGen
             using ElementType = typename ResType::ElementType;
             ResType out(evalItem.m_outputShape);
 
-            auto low_in1 = LowerAccess(in1);
-            const ElementType* mem_in1 = low_in1.RawMemory();
-
-            auto low_in2 = LowerAccess(in2);
-            const ElementType* mem_in2 = low_in2.RawMemory();
-
-            auto low_out = LowerAccess(out);
-            ElementType* mem_out = low_out.MutableRawMemory();
-
-            static_assert(std::is_same_v<DeviceTypeFromHandle<TOutputHandle>, DeviceTags::CPU>, "Currently only CPU is supported");
-
-            for (size_t i = 0; i < remCount1; ++i)
+            if constexpr (std::is_same_v<DeviceTypeFromHandle<TOutputHandle>, DeviceTags::CPU>)
             {
-                for (size_t j = 0; j < remCount2; ++j)
-                {
-                    mem_out[i * remCount2 + j] = 0;
-                    for (size_t l = 0; l < contractCount; ++l)
+                auto low_in1 = LowerAccess(in1);
+                const ElementType* mem_in1 = low_in1.RawMemory();
+
+                auto low_in2 = LowerAccess(in2);
+                const ElementType* mem_in2 = low_in2.RawMemory();
+
+                auto low_out = LowerAccess(out);
+                ElementType* mem_out = low_out.MutableRawMemory();
+
+                for (size_t i = 0; i < remCount1; ++i)
+                    for (size_t j = 0; j < remCount2; ++j)
                     {
-                        mem_out[i * remCount2 + j] += mem_in1[i * contractCount + l] * mem_in2[l * remCount2 + j];
+                        mem_out[i * remCount2 + j] = 0;
+                        for (size_t l = 0; l < contractCount; ++l)  mem_out[i * remCount2 + j] += mem_in1[i * contractCount + l] * mem_in2[l * remCount2 + j];
                     }
-                }
             }
+            else    throw std::runtime_error("Dot: Currently only CPU device is supported");
             evalItem.m_outputHandle.SetData(std::move(out));
         }
     };
@@ -169,3 +167,4 @@ namespace OperDot::NSCaseGen
         return ResType(std::forward<TP1>(p_m1), std::forward<TP2>(p_m2));
     }
 }
+
