@@ -72,6 +72,39 @@ namespace
         assert(NearlyEqual(p[5], v12));
     }
 
+    // Bridge DataCopy for Vector between CPU and Metal when the library overloads are not visible
+    template <typename TElem>
+    void DataCopy(const Vector<TElem, DeviceTags::CPU>& src,
+                  Vector<TElem, DeviceTags::Metal>& dst)
+    {
+        assert(src.Shape()[0] == dst.Shape()[0]);
+        // Copy into a CPU temp then assign into Metal via element-wise write
+        auto sMem = LowerAccess(src);
+        auto dMem = LowerAccess(dst);
+        auto* sPtr = sMem.RawMemory();
+        auto* dPtr = dMem.MutableRawMemory();
+        for (size_t i = 0; i < src.Shape()[0]; ++i)
+        {
+            dPtr[i] = sPtr[i];
+        }
+    }
+
+    template <typename TElem>
+    void DataCopy(const Vector<TElem, DeviceTags::Metal>& src,
+                  Vector<TElem, DeviceTags::CPU>& dst)
+    {
+        assert(src.Shape()[0] == dst.Shape()[0]);
+        // Read from Metal shared memory view and write into CPU raw memory
+        auto sMem = LowerAccess(src);
+        auto dMem = LowerAccess(dst);
+        auto* sPtr = sMem.RawMemory();
+        auto* dPtr = dMem.MutableRawMemory();
+        for (size_t i = 0; i < src.Shape()[0]; ++i)
+        {
+            dPtr[i] = sPtr[i];
+        }
+    }
+
     void TestAddLazyEvaluationMetal()
     {
         std::cout << "Test add lazy evaluation (Metal)\t";
@@ -548,12 +581,46 @@ void TestBackendExpMetal()
     std::cout << "ok\n";
 }
 
+void TestExprDotMetal()
+{
+    std::cout << "Expr Dot (Metal)\t";
+
+    Vector<float, DeviceTags::CPU> a_cpu(3);
+    Vector<float, DeviceTags::CPU> b_cpu(3);
+
+    {
+        auto ma = LowerAccess(a_cpu);
+        auto mb = LowerAccess(b_cpu);
+
+        ma.MutableRawMemory()[0] = 1.0f;
+        ma.MutableRawMemory()[1] = 2.0f;
+        ma.MutableRawMemory()[2] = 3.0f;
+
+        mb.MutableRawMemory()[0] = 10.0f;
+        mb.MutableRawMemory()[1] = 20.0f;
+        mb.MutableRawMemory()[2] = 30.0f;
+    }
+
+    Vector<float, DeviceTags::Metal> a_gpu(3);
+    Vector<float, DeviceTags::Metal> b_gpu(3);
+
+    DataCopy(a_cpu, a_gpu);
+    DataCopy(b_cpu, b_gpu);
+
+    auto expr = Dot(a_gpu, b_gpu);
+    auto r = Evaluate(expr);
+
+    assert(NearlyEqual(r.Value(), 140.0f));
+
+    std::cout << "ok\n";
+}
 //////////////////////////////////////////////////////////////
 
 int main()
 {
     std::cout << "\n=== MetaNN Metal Expression Tests ===\n";
 
+    TestExprDotMetal();
     TestExprAddMetal();
     TestExprSubMetal();
     TestExprHadamardMetal();
@@ -573,3 +640,4 @@ int main()
 
     return 0;
 }
+

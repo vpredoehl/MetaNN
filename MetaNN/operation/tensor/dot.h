@@ -5,6 +5,7 @@
 #include <MetaNN/facilities/_.h>
 #include <MetaNN/operation/facilities/_.h>
 #include <MetaNN/policies/_.h>
+#include <MetaNN/metal/metal_matmul.h>
 #include <cassert>
 #include <type_traits>
 #include <stdexcept>
@@ -66,15 +67,30 @@ namespace OperDot::NSCaseGen
             using ElementType = typename ResType::ElementType;
             ResType out(evalItem.m_outputShape);
 
-            if constexpr (std::is_same_v<DeviceTypeFromHandle<TOutputHandle>, DeviceTags::CPU>)
+            using OutDevice = DeviceTypeFromHandle<TOutputHandle>;
+            static_assert(std::is_same_v<OutDevice, DeviceTags::CPU> ||
+                          std::is_same_v<OutDevice, DeviceTags::Metal>,
+                          "Dot: Currently only CPU or Metal device is supported");
+
+            auto low_in1 = LowerAccess(in1);
+            auto low_in2 = LowerAccess(in2);
+            auto low_out = LowerAccess(out);
+
+            if constexpr (std::is_same_v<OutDevice, DeviceTags::Metal>)
             {
-                auto low_in1 = LowerAccess(in1);
+                static_assert(std::is_same_v<ElementType, float>, "Dot (Metal): float-only implementation");
+                const auto a_mem = low_in1.SharedMemory();
+                const auto b_mem = low_in2.SharedMemory();
+                auto c_mem = low_out.SharedMemory();
+
+                // Treat the generalized dot as a matrix multiply: (remCount1 x contractCount) * (contractCount x remCount2)
+                NSMetalMatMul::MatMul(a_mem, b_mem, c_mem,
+                                      remCount1, contractCount, remCount2);
+            }
+            else if constexpr (std::is_same_v<OutDevice, DeviceTags::CPU>)
+            {
                 const ElementType* mem_in1 = low_in1.RawMemory();
-
-                auto low_in2 = LowerAccess(in2);
                 const ElementType* mem_in2 = low_in2.RawMemory();
-
-                auto low_out = LowerAccess(out);
                 ElementType* mem_out = low_out.MutableRawMemory();
 
                 for (size_t i = 0; i < remCount1; ++i)
@@ -84,7 +100,9 @@ namespace OperDot::NSCaseGen
                         for (size_t l = 0; l < contractCount; ++l)  mem_out[i * remCount2 + j] += mem_in1[i * contractCount + l] * mem_in2[l * remCount2 + j];
                     }
             }
-            else    throw std::runtime_error("Dot: Currently only CPU device is supported");
+            else  static_assert(std::is_same_v<OutDevice, DeviceTags::CPU> || std::is_same_v<OutDevice, DeviceTags::Metal>,
+                            "Dot: Unsupported device type");
+
             evalItem.m_outputHandle.SetData(std::move(out));
         }
     };
