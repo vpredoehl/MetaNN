@@ -57,7 +57,7 @@
 		08A32B6F2F5D356A00BE2DCE /* MetalPerformanceShaders.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08A32B6D2F5D356A00BE2DCE /* MetalPerformanceShaders.framework */; };
 		08A331D92F5FCA1500BE2DCE /* continuous_memory_metal.mm in Sources */ = {isa = PBXBuildFile; fileRef = 08A32B682F5D350600BE2DCE /* continuous_memory_metal.mm */; };
 		08A331DA2F5FCA1500BE2DCE /* metal_copy.mm in Sources */ = {isa = PBXBuildFile; fileRef = 08A32B702F5D404300BE2DCE /* metal_copy.mm */; };
-		08A3370B2F5FD95F00BE2DCE /* liblibMetaNN.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 08A331D52F5FCA0200BE2DCE /* liblibMetaNN.a */; };
+		08A3370B2F5FD95F00BE2DCE /* libMetaNN.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 08A331D52F5FCA0200BE2DCE /* libMetaNN.a */; };
 		08CE81D72EEFAA2000A7AE01 /* test_tensor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC37D2DFA90C500C6E24A /* test_tensor.cpp */; };
 		08CE81DE2EEFAA6800A7AE01 /* test_compose_kenrel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC4FF2DFCBB0600C6E24A /* test_compose_kenrel.cpp */; };
 		08CE81DF2EEFAA8700A7AE01 /* test_add_layer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08DDC5392DFCBB0600C6E24A /* test_add_layer.cpp */; };
@@ -137,6 +137,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 08A32A292F5D090F00BE2DCE;
 			remoteInfo = MetalBuffer;
+		};
+		08E479AD2F650CCD00915FA0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0870E49B2D698BBC0097085B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 08A32F9F2F5FC20900BE2DCE;
+			remoteInfo = MetaNN_metal;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -330,8 +337,8 @@
 		08A32B702F5D404300BE2DCE /* metal_copy.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = metal_copy.mm; sourceTree = "<group>"; };
 		08A32B722F5D406900BE2DCE /* metal_copy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = metal_copy.h; sourceTree = "<group>"; };
 		08A32C162F5E437600BE2DCE /* matmul.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = matmul.h; sourceTree = "<group>"; };
-		08A32FA02F5FC20900BE2DCE /* MetaNN.metallib */ = {isa = PBXFileReference; explicitFileType = "archive.metal-library"; includeInIndex = 0; path = MetaNN.metallib; sourceTree = BUILT_PRODUCTS_DIR; };
-		08A331D52F5FCA0200BE2DCE /* liblibMetaNN.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = liblibMetaNN.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		08A32FA02F5FC20900BE2DCE /* MetaNN_metal.metallib */ = {isa = PBXFileReference; explicitFileType = "archive.metal-library"; includeInIndex = 0; path = MetaNN_metal.metallib; sourceTree = BUILT_PRODUCTS_DIR; };
+		08A331D52F5FCA0200BE2DCE /* libMetaNN.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMetaNN.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		08CE82AD2EEFB0F800A7AE01 /* MetalSwift.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MetalSwift.xcodeproj; path = MetalSwift/MetalSwift.xcodeproj; sourceTree = "<group>"; };
 		08DDC3752DFA90C500C6E24A /* _.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = _.h; sourceTree = "<group>"; };
 		08DDC3762DFA90C500C6E24A /* test_shape.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_shape.cpp; sourceTree = "<group>"; };
@@ -434,21 +441,22 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		08A331C62F5FC7C100BE2DCE /* Exceptions for "metal" folder in "MetaNN" target */ = {
+		08A331C62F5FC7C100BE2DCE /* Exceptions for "metal" folder in "MetaNN_metal" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				add.metal,
 				matmul.metal,
 			);
-			target = 08A32F9F2F5FC20900BE2DCE /* MetaNN */;
+			target = 08A32F9F2F5FC20900BE2DCE /* MetaNN_metal */;
 		};
-		08A331DD2F5FCA3300BE2DCE /* Exceptions for "metal" folder in "libMetaNN" target */ = {
+		08A331DD2F5FCA3300BE2DCE /* Exceptions for "metal" folder in "MetaNN" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				matmul.metal,
 				metal_add.mm,
 				metal_matmul.mm,
 			);
-			target = 08A331D42F5FCA0200BE2DCE /* libMetaNN */;
+			target = 08A331D42F5FCA0200BE2DCE /* MetaNN */;
 		};
 		08A334E42F5FD21B00BE2DCE /* Exceptions for "metal" folder in "MetalSwiftTest" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
@@ -472,8 +480,8 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				08A334E42F5FD21B00BE2DCE /* Exceptions for "metal" folder in "MetalSwiftTest" target */,
-				08A331C62F5FC7C100BE2DCE /* Exceptions for "metal" folder in "MetaNN" target */,
-				08A331DD2F5FCA3300BE2DCE /* Exceptions for "metal" folder in "libMetaNN" target */,
+				08A331C62F5FC7C100BE2DCE /* Exceptions for "metal" folder in "MetaNN_metal" target */,
+				08A331DD2F5FCA3300BE2DCE /* Exceptions for "metal" folder in "MetaNN" target */,
 			);
 			path = metal;
 			sourceTree = "<group>";
@@ -506,7 +514,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				08A3370B2F5FD95F00BE2DCE /* liblibMetaNN.a in Frameworks */,
+				08A3370B2F5FD95F00BE2DCE /* libMetaNN.a in Frameworks */,
 				08A32B662F5D2BC300BE2DCE /* libMetalBuffer.a in Frameworks */,
 				08A32B6E2F5D356A00BE2DCE /* Metal.framework in Frameworks */,
 				08A32B6F2F5D356A00BE2DCE /* MetalPerformanceShaders.framework in Frameworks */,
@@ -545,8 +553,8 @@
 				08095D7B2DFCBD0A008D6698 /* LayerTest */,
 				08095D862DFCBECB008D6698 /* OtherTests */,
 				08A32B532F5D2B9F00BE2DCE /* MetalSwiftTest */,
-				08A32FA02F5FC20900BE2DCE /* MetaNN.metallib */,
-				08A331D52F5FCA0200BE2DCE /* liblibMetaNN.a */,
+				08A32FA02F5FC20900BE2DCE /* MetaNN_metal.metallib */,
+				08A331D52F5FCA0200BE2DCE /* libMetaNN.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1322,9 +1330,9 @@
 			productReference = 08A32B532F5D2B9F00BE2DCE /* MetalSwiftTest */;
 			productType = "com.apple.product-type.tool";
 		};
-		08A32F9F2F5FC20900BE2DCE /* MetaNN */ = {
+		08A32F9F2F5FC20900BE2DCE /* MetaNN_metal */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 08A32FB02F5FC20900BE2DCE /* Build configuration list for PBXNativeTarget "MetaNN" */;
+			buildConfigurationList = 08A32FB02F5FC20900BE2DCE /* Build configuration list for PBXNativeTarget "MetaNN_metal" */;
 			buildPhases = (
 				08A32F9E2F5FC20900BE2DCE /* Sources */,
 			);
@@ -1333,16 +1341,16 @@
 			dependencies = (
 				08A330712F5FC2D000BE2DCE /* PBXTargetDependency */,
 			);
-			name = MetaNN;
+			name = MetaNN_metal;
 			packageProductDependencies = (
 			);
 			productName = MetaNN;
-			productReference = 08A32FA02F5FC20900BE2DCE /* MetaNN.metallib */;
+			productReference = 08A32FA02F5FC20900BE2DCE /* MetaNN_metal.metallib */;
 			productType = "com.apple.product-type.metal-library";
 		};
-		08A331D42F5FCA0200BE2DCE /* libMetaNN */ = {
+		08A331D42F5FCA0200BE2DCE /* MetaNN */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 08A331D62F5FCA0200BE2DCE /* Build configuration list for PBXNativeTarget "libMetaNN" */;
+			buildConfigurationList = 08A331D62F5FCA0200BE2DCE /* Build configuration list for PBXNativeTarget "MetaNN" */;
 			buildPhases = (
 				08A331D12F5FCA0200BE2DCE /* Headers */,
 				08A331D22F5FCA0200BE2DCE /* Sources */,
@@ -1351,12 +1359,13 @@
 			buildRules = (
 			);
 			dependencies = (
+				08E479AE2F650CCD00915FA0 /* PBXTargetDependency */,
 			);
-			name = libMetaNN;
+			name = MetaNN;
 			packageProductDependencies = (
 			);
 			productName = libMetaNN;
-			productReference = 08A331D52F5FCA0200BE2DCE /* liblibMetaNN.a */;
+			productReference = 08A331D52F5FCA0200BE2DCE /* libMetaNN.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -1407,8 +1416,8 @@
 				08095D4F2DFCBD0A008D6698 /* LayerTest */,
 				08095D7D2DFCBECB008D6698 /* OtherTests */,
 				08A32B522F5D2B9F00BE2DCE /* MetalSwiftTest */,
-				08A32F9F2F5FC20900BE2DCE /* MetaNN */,
-				08A331D42F5FCA0200BE2DCE /* libMetaNN */,
+				08A32F9F2F5FC20900BE2DCE /* MetaNN_metal */,
+				08A331D42F5FCA0200BE2DCE /* MetaNN */,
 			);
 		};
 /* End PBXProject section */
@@ -1564,18 +1573,23 @@
 		};
 		08A334E62F5FD22200BE2DCE /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 08A32F9F2F5FC20900BE2DCE /* MetaNN */;
+			target = 08A32F9F2F5FC20900BE2DCE /* MetaNN_metal */;
 			targetProxy = 08A334E52F5FD22200BE2DCE /* PBXContainerItemProxy */;
 		};
 		08A334E82F5FD22200BE2DCE /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 08A331D42F5FCA0200BE2DCE /* libMetaNN */;
+			target = 08A331D42F5FCA0200BE2DCE /* MetaNN */;
 			targetProxy = 08A334E72F5FD22200BE2DCE /* PBXContainerItemProxy */;
 		};
 		08A334EA2F5FD23E00BE2DCE /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = MetalBuffer;
 			targetProxy = 08A334E92F5FD23E00BE2DCE /* PBXContainerItemProxy */;
+		};
+		08E479AE2F650CCD00915FA0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 08A32F9F2F5FC20900BE2DCE /* MetaNN_metal */;
+			targetProxy = 08E479AD2F650CCD00915FA0 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1926,7 +1940,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		08A32FB02F5FC20900BE2DCE /* Build configuration list for PBXNativeTarget "MetaNN" */ = {
+		08A32FB02F5FC20900BE2DCE /* Build configuration list for PBXNativeTarget "MetaNN_metal" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				08A32FA42F5FC20900BE2DCE /* Debug */,
@@ -1935,7 +1949,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		08A331D62F5FCA0200BE2DCE /* Build configuration list for PBXNativeTarget "libMetaNN" */ = {
+		08A331D62F5FCA0200BE2DCE /* Build configuration list for PBXNativeTarget "MetaNN" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				08A331D72F5FCA0200BE2DCE /* Debug */,
