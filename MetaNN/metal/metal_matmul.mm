@@ -23,7 +23,11 @@ namespace
         static id<MTLDevice> device = MTLCreateSystemDefaultDevice();
         return device;
     }
-
+    id<MTLLibrary> GetLibrary()
+    {
+        static id<MTLLibrary> lib = [GetDevice() newDefaultLibrary];
+        return lib;
+    }
     id<MTLCommandQueue> GetQueue()
     {
         static id<MTLCommandQueue> queue = [GetDevice() newCommandQueue];
@@ -131,6 +135,72 @@ namespace
         }
 
         return mat;
+    }
+}
+
+id<MTLComputePipelineState> GetBiasPipeline()
+{
+    static id<MTLComputePipelineState> pso = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSError* error = nil;
+        id<MTLFunction> fn = [GetLibrary() newFunctionWithName:@"add_row_bias_f32"];
+        pso = [GetDevice() newComputePipelineStateWithFunction:fn error:&error];
+        if (!pso)
+        {
+            @throw [NSException exceptionWithName:@"MetalMatMulBias"
+                                           reason:error.localizedDescription
+                                         userInfo:nil];
+        }
+    });
+    return pso;
+}
+
+void MatMulBias(const ContinuousMemory<float, DeviceTags::Metal>& a,
+                const ContinuousMemory<float, DeviceTags::Metal>& b,
+                const ContinuousMemory<float, DeviceTags::Metal>& bias,
+                ContinuousMemory<float, DeviceTags::Metal>& c,
+                size_t m, size_t k, size_t n)
+{
+    @autoreleasepool
+    {
+        if (m == 0 || k == 0 || n == 0)
+        {
+            return;
+        }
+
+        // First do the MPS GEMM into c
+        MatMul(a, b, c, m, k, n);
+
+        // Then add bias row-wise to c without materializing (m x n)
+        id<MTLCommandBuffer> cmd = [GetQueue() commandBuffer];
+        id<MTLComputeCommandEncoder> enc = [cmd computeCommandEncoder];
+        id<MTLComputePipelineState> pso = GetBiasPipeline();
+
+        id<MTLBuffer> bufC = BufferOf(c);
+        id<MTLBuffer> bufBias = BufferOf(bias);
+
+        uint mm = (uint)m;
+        uint nn = (uint)n;
+
+        [enc setComputePipelineState:pso];
+        [enc setBuffer:bufC offset:0 atIndex:0];
+        [enc setBuffer:bufBias offset:0 atIndex:1];
+        [enc setBytes:&mm length:sizeof(mm) atIndex:2];
+        [enc setBytes:&nn length:sizeof(nn) atIndex:3];
+
+        MTLSize grid = MTLSizeMake(n, m, 1);
+
+        NSUInteger tw = pso.threadExecutionWidth;
+        NSUInteger th = pso.maxTotalThreadsPerThreadgroup / tw;
+        if (th == 0) th = 1;
+
+        MTLSize group = MTLSizeMake(tw, th, 1);
+        [enc dispatchThreads:grid threadsPerThreadgroup:group];
+        [enc endEncoding];
+
+        [cmd commit];
+        [cmd waitUntilCompleted];
     }
 }
 

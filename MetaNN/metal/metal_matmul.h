@@ -16,5 +16,10 @@ namespace MetaNN::NSMetalMatMul
                 const ContinuousMemory<float, DeviceTags::Metal>& b,
                 ContinuousMemory<float, DeviceTags::Metal>& c,
                 size_t m, size_t k, size_t n);
+    void MatMulBias(const ContinuousMemory<float, DeviceTags::Metal>& a,
+                    const ContinuousMemory<float, DeviceTags::Metal>& b,
+                    const ContinuousMemory<float, DeviceTags::Metal>& bias,
+                    ContinuousMemory<float, DeviceTags::Metal>& c,
+                    size_t m, size_t k, size_t n);
 }
 

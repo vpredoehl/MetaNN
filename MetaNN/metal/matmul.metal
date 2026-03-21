@@ -31,3 +31,16 @@ kernel void matrix_mul_f32(
     c[row * n + col] = sum;
 }
 
+kernel void add_row_bias_f32(
+    device float* c [[buffer(0)]],
+    device const float* bias [[buffer(1)]],
+    constant uint& m [[buffer(2)]],
+    constant uint& n [[buffer(3)]],
+    uint2 gid [[thread_position_in_grid]])
+{
+    uint col = gid.x;
+    uint row = gid.y;
+    if (row >= m || col >= n) return;
+    c[row * n + col] += bias[col];
+}
+
