@@ -156,6 +156,143 @@ id<MTLComputePipelineState> GetBiasPipeline()
     return pso;
 }
 
+id<MTLComputePipelineState> GetGateStateFusedPipeline()
+{
+    static id<MTLComputePipelineState> pipeline = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        id<MTLDevice> device = GetDevice();
+        if (device == nil)
+        {
+            @throw [NSException exceptionWithName:@"MetalAdd"
+                                           reason:@"GetDevice returned nil in GateStateFused"
+                                         userInfo:nil];
+        }
+
+        NSError* error = nil;
+        id<MTLLibrary> library = GetLibrary();
+        if (library == nil)
+        {
+            @throw [NSException exceptionWithName:@"MetalAdd"
+                                           reason:[NSString stringWithFormat:@"Failed to load default Metal library in GateStateFused: %@", error]
+                                         userInfo:nil];
+        }
+
+        id<MTLFunction> fn = [library newFunctionWithName:@"gate_state_fused_f32"];
+        if (fn == nil)
+        {
+            @throw [NSException exceptionWithName:@"MetalAdd"
+                                           reason:@"Missing Metal function gate_state_fused_f32"
+                                         userInfo:nil];
+        }
+
+        pipeline = [device newComputePipelineStateWithFunction:fn error:&error];
+        if (pipeline == nil)
+        {
+            @throw [NSException exceptionWithName:@"MetalAdd"
+                                           reason:[NSString stringWithFormat:@"Failed to create GateStateFused pipeline: %@", error]
+                                         userInfo:nil];
+        }
+    });
+    return pipeline;
+}
+
+void GateStateFused(const ContinuousMemory<float, DeviceTags::Metal>& gates,
+                    const ContinuousMemory<float, DeviceTags::Metal>& prevCell,
+                    ContinuousMemory<float, DeviceTags::Metal>& gateI,
+                    ContinuousMemory<float, DeviceTags::Metal>& gateF,
+                    ContinuousMemory<float, DeviceTags::Metal>& gateG,
+                    ContinuousMemory<float, DeviceTags::Metal>& gateO,
+                    ContinuousMemory<float, DeviceTags::Metal>& cellOut,
+                    ContinuousMemory<float, DeviceTags::Metal>& hiddenOut,
+                    size_t batchSize,
+                    size_t hiddenSize)
+{
+    @autoreleasepool
+    {
+        if (batchSize == 0 || hiddenSize == 0)
+        {
+            return;
+        }
+
+        id<MTLDevice> device = GetDevice();
+        if (device == nil)
+        {
+            @throw [NSException exceptionWithName:@"MetalAdd"
+                                           reason:@"GetDevice returned nil in GateStateFused"
+                                         userInfo:nil];
+        }
+
+        id<MTLCommandQueue> queue = GetQueue();
+        if (queue == nil)
+        {
+            @throw [NSException exceptionWithName:@"MetalAdd"
+                                           reason:@"Failed to create Metal command queue in GateStateFused"
+                                         userInfo:nil];
+        }
+
+        id<MTLCommandBuffer> commandBuffer = [queue commandBuffer];
+        if (commandBuffer == nil)
+        {
+            @throw [NSException exceptionWithName:@"MetalAdd"
+                                           reason:@"Failed to create Metal command buffer in GateStateFused"
+                                         userInfo:nil];
+        }
+
+        id<MTLComputeCommandEncoder> encoder = [commandBuffer computeCommandEncoder];
+        if (encoder == nil)
+        {
+            @throw [NSException exceptionWithName:@"MetalAdd"
+                                           reason:@"Failed to create Metal compute encoder in GateStateFused"
+                                         userInfo:nil];
+        }
+
+        id<MTLComputePipelineState> pipeline = GetGateStateFusedPipeline();
+        [encoder setComputePipelineState:pipeline];
+
+        id<MTLBuffer> bufGates = BufferOf(gates);
+        id<MTLBuffer> bufPrevCell = BufferOf(prevCell);
+        id<MTLBuffer> bufGateI = BufferOf(gateI);
+        id<MTLBuffer> bufGateF = BufferOf(gateF);
+        id<MTLBuffer> bufGateG = BufferOf(gateG);
+        id<MTLBuffer> bufGateO = BufferOf(gateO);
+        id<MTLBuffer> bufCellOut = BufferOf(cellOut);
+        id<MTLBuffer> bufHiddenOut = BufferOf(hiddenOut);
+
+        if (!bufGates || !bufPrevCell || !bufGateI || !bufGateF || !bufGateG || !bufGateO || !bufCellOut || !bufHiddenOut)
+        {
+            @throw [NSException exceptionWithName:@"MetalAdd"
+                                           reason:@"One or more Metal buffers are null in GateStateFused"
+                                         userInfo:nil];
+        }
+
+        [encoder setBuffer:bufGates offset:0 atIndex:0];
+        [encoder setBuffer:bufPrevCell offset:0 atIndex:1];
+        [encoder setBuffer:bufGateI offset:0 atIndex:2];
+        [encoder setBuffer:bufGateF offset:0 atIndex:3];
+        [encoder setBuffer:bufGateG offset:0 atIndex:4];
+        [encoder setBuffer:bufGateO offset:0 atIndex:5];
+        [encoder setBuffer:bufCellOut offset:0 atIndex:6];
+        [encoder setBuffer:bufHiddenOut offset:0 atIndex:7];
+
+        uint32_t batchCount = static_cast<uint32_t>(batchSize);
+        uint32_t hiddenCount = static_cast<uint32_t>(hiddenSize);
+        [encoder setBytes:&batchCount length:sizeof(batchCount) atIndex:8];
+        [encoder setBytes:&hiddenCount length:sizeof(hiddenCount) atIndex:9];
+
+        const NSUInteger total = static_cast<NSUInteger>(batchSize * hiddenSize);
+        const NSUInteger w = pipeline.threadExecutionWidth;
+        const NSUInteger tgSize = (w == 0) ? 64 : w;
+
+        [encoder dispatchThreads:MTLSizeMake(total, 1, 1)
+          threadsPerThreadgroup:MTLSizeMake(tgSize, 1, 1)];
+        [encoder endEncoding];
+
+        // ✅ ASYNC: do NOT wait here
+        [commandBuffer commit];
+    }
+}
+
 void MatMulBias(const ContinuousMemory<float, DeviceTags::Metal>& a,
                 const ContinuousMemory<float, DeviceTags::Metal>& b,
                 const ContinuousMemory<float, DeviceTags::Metal>& bias,
@@ -275,4 +412,25 @@ void MatMul(const ContinuousMemory<float, DeviceTags::Metal>& a,
         }
     }
 }
+
+    void WaitForAll()
+    {
+        @autoreleasepool
+        {
+            id<MTLCommandQueue> queue = GetQueue();
+            if (!queue)
+            {
+                throw std::runtime_error("MetalMatMul: failed to create command queue");
+            }
+
+            id<MTLCommandBuffer> cmd = [queue commandBuffer];
+            if (!cmd)
+            {
+                throw std::runtime_error("MetalMatMul: failed to create command buffer");
+            }
+
+            [cmd commit];
+            [cmd waitUntilCompleted];
+        }
+    }
 } // namespace MetaNN::NSMetalMatMul
