@@ -5,6 +5,7 @@
 #include <cassert>
 
 #include <cstddef>
+#include <algorithm>
 #include <memory>
 #include <type_traits>
 #include <stdexcept>
@@ -24,6 +25,24 @@ public:
         , m_size(p_size)
     {}
 
+    ContinuousMemory(const ContinuousMemory& rhs)
+        : m_mem(Allocator<TDevice>::template Allocate<ElementType>(rhs.m_size)), m_size(rhs.m_size)
+          { if (m_size != 0)  std::copy(rhs.RawMemory(), rhs.RawMemory() + m_size, m_mem.get());  }
+
+    ContinuousMemory& operator=(const ContinuousMemory& rhs)
+    {
+        if (this == &rhs) return *this;
+
+        auto newMem = Allocator<TDevice>::template Allocate<ElementType>(rhs.m_size);
+        if (rhs.m_size != 0)  std::copy(rhs.RawMemory(), rhs.RawMemory() + rhs.m_size, newMem.get());
+        m_mem = std::move(newMem);
+        m_size = rhs.m_size;
+        return *this;
+    }
+
+    ContinuousMemory(ContinuousMemory&&) noexcept = default;
+    ContinuousMemory& operator=(ContinuousMemory&&) noexcept = default;
+
     ContinuousMemory Shift(size_t pos) const
     {
         assert(pos < m_size);
@@ -34,31 +53,14 @@ public:
     auto RawMemory() const  { return m_mem.get(); }
     TElem* MutableRawMemory() { return m_mem.get();  }
 
-    bool IsShared() const
-    {
-        return m_mem.use_count() > 1;
-    }
-    
-    size_t Size() const
-    {
-        return m_size;
-    }
-    
-    bool operator== (const ContinuousMemory& val) const noexcept
-    {
-        return (m_mem == val.m_mem) && (m_size == val.m_size);
-    }
-
-    bool operator!= (const ContinuousMemory& val) const noexcept
-    {
-        return !(operator==(val));
-    }
+  bool IsShared() const { return m_mem.use_count() > 1; }
+  size_t Size() const { return m_size;  }
+  bool operator== (const ContinuousMemory& val) const noexcept  { return (m_mem == val.m_mem) && (m_size == val.m_size);  }
+  bool operator!= (const ContinuousMemory& val) const noexcept  { return !(operator==(val));  }
 
 private:
     ContinuousMemory(std::shared_ptr<ElementType> ptr, size_t p_size)
-        : m_mem(std::move(ptr))
-        , m_size(p_size)
-    {}
+        : m_mem(std::move(ptr)), m_size(p_size) {}
     
 private:
     std::shared_ptr<ElementType> m_mem;
@@ -71,6 +73,13 @@ class ContinuousMemory<TElem, DeviceTags::Metal>
 {
 public:
     explicit ContinuousMemory(size_t p_size);
+
+    ContinuousMemory(const ContinuousMemory& rhs);
+    ContinuousMemory& operator=(const ContinuousMemory& rhs);
+
+    ContinuousMemory(ContinuousMemory&&) noexcept = default;
+    ContinuousMemory& operator=(ContinuousMemory&&) noexcept = default;
+
     ContinuousMemory Shift(size_t pos) const;
 
     const TElem* RawMemory() const;
@@ -78,12 +87,19 @@ public:
     bool IsShared() const;
     size_t Size() const;
     void* NativeHandle() const;
+
 private:
     struct Impl;
+
+    ContinuousMemory(std::shared_ptr<Impl> impl, size_t offset, size_t size)
+        : m_impl(std::move(impl))
+        , m_offset(offset)
+        , m_size(size)
+    {}
+
+private:
     std::shared_ptr<Impl> m_impl;
     size_t m_offset = 0;
     size_t m_size = 0;
 };
 }
-
-

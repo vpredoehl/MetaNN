@@ -440,36 +440,6 @@
 		08DDC5CA2DFCBB2700C6E24A /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		08A331C62F5FC7C100BE2DCE /* Exceptions for "metal" folder in "MetaNN_metal" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				add.metal,
-				matmul.metal,
-			);
-			target = 08A32F9F2F5FC20900BE2DCE /* MetaNN_metal */;
-		};
-		08A331DD2F5FCA3300BE2DCE /* Exceptions for "metal" folder in "MetaNN" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				matmul.metal,
-				metal_add.mm,
-				metal_matmul.mm,
-			);
-			target = 08A331D42F5FCA0200BE2DCE /* MetaNN */;
-		};
-		08A334E42F5FD21B00BE2DCE /* Exceptions for "metal" folder in "MetalSwiftTest" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				add.metal,
-				matmul.metal,
-				metal_add.mm,
-				metal_matmul.mm,
-			);
-			target = 08A32B522F5D2B9F00BE2DCE /* MetalSwiftTest */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		08A32B542F5D2B9F00BE2DCE /* MetalSwiftTest */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
@@ -478,11 +448,6 @@
 		};
 		08A32B732F5D480900BE2DCE /* metal */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				08A334E42F5FD21B00BE2DCE /* Exceptions for "metal" folder in "MetalSwiftTest" target */,
-				08A331C62F5FC7C100BE2DCE /* Exceptions for "metal" folder in "MetaNN_metal" target */,
-				08A331DD2F5FCA3300BE2DCE /* Exceptions for "metal" folder in "MetaNN" target */,
-			);
 			path = metal;
 			sourceTree = "<group>";
 		};
