@@ -250,6 +250,8 @@ void GateStateFused(const ContinuousMemory<float, DeviceTags::Metal>& gates,
         id<MTLComputePipelineState> pipeline = GetGateStateFusedPipeline();
         [encoder setComputePipelineState:pipeline];
 
+        // gates is a row-major [batchSize, 4 * hiddenSize] tensor in CPU order:
+        // I = [0:H), F = [H:2H), G = [2H:3H), O = [3H:4H)
         id<MTLBuffer> bufGates = BufferOf(gates);
         id<MTLBuffer> bufPrevCell = BufferOf(prevCell);
         id<MTLBuffer> bufGateI = BufferOf(gateI);
