@@ -11,7 +11,8 @@
 #include <unordered_map>
 #include <mutex>
 #include <tuple>
-
+#include <iostream>
+#include <cstdlib>
 #include "metal_matmul.h"
 
 namespace MetaNN::NSMetalMatMul
@@ -214,6 +215,7 @@ void GateStateFused(const ContinuousMemory<float, DeviceTags::Metal>& gates,
         {
             return;
         }
+        WaitForAll();
 
         id<MTLDevice> device = GetDevice();
         if (device == nil)
@@ -260,13 +262,122 @@ void GateStateFused(const ContinuousMemory<float, DeviceTags::Metal>& gates,
         id<MTLBuffer> bufGateO = BufferOf(gateO);
         id<MTLBuffer> bufCellOut = BufferOf(cellOut);
         id<MTLBuffer> bufHiddenOut = BufferOf(hiddenOut);
-
+        
+        static bool s_printedGateStateBufferDiag = false;
+        if (!s_printedGateStateBufferDiag)
+        {
+            s_printedGateStateBufferDiag = true;
+            std::cout
+                << "DIAG_GATESTATE_BUFFERS"
+                << ",gates=" << (__bridge const void*)bufGates
+                << ",prevCell=" << (__bridge const void*)bufPrevCell
+                << ",gateI=" << (__bridge const void*)bufGateI
+                << ",gateF=" << (__bridge const void*)bufGateF
+                << ",gateG=" << (__bridge const void*)bufGateG
+                << ",gateO=" << (__bridge const void*)bufGateO
+                << ",cellOut=" << (__bridge const void*)bufCellOut
+                << ",hiddenOut=" << (__bridge const void*)bufHiddenOut
+                << ",batchSize=" << batchSize
+                << ",hiddenSize=" << hiddenSize
+                << "\n";
+        }
+        static bool s_printedGateStateHostProbe = false;
+        if (!s_printedGateStateHostProbe)
+        {
+            s_printedGateStateHostProbe = true;
+            const float* gatesHost = static_cast<const float*>([bufGates contents]);
+            std::cout << "DIAG_GATESTATE_GATES_HOST";
+            if (gatesHost)
+            {
+                const size_t probeCount = std::min<size_t>(32, batchSize * 4 * hiddenSize);
+                for (size_t i = 0; i < probeCount; ++i)
+                    std::cout << ",g" << i << "=" << gatesHost[i];
+            }
+            else
+            {
+                std::cout << ",contents=null";
+            }
+            std::cout << "\n";
+        }
         if (!bufGates || !bufPrevCell || !bufGateI || !bufGateF || !bufGateG || !bufGateO || !bufCellOut || !bufHiddenOut)
         {
             @throw [NSException exceptionWithName:@"MetalAdd"
                                            reason:@"One or more Metal buffers are null in GateStateFused"
                                          userInfo:nil];
         }
+        
+        auto abortAlias = [&](const char* tag, id<MTLBuffer> a, id<MTLBuffer> b)
+        {
+            if (a == b)
+            {
+                std::cout
+                    << "DIAG_ABORT_GATESTATE_BUFFER_ALIAS"
+                    << ",tag=" << tag
+                    << ",a=" << (__bridge const void*)a
+                    << ",b=" << (__bridge const void*)b
+                    << "\n";
+                std::abort();
+            }
+        };
+
+        abortAlias("gateI_vs_gates", bufGateI, bufGates);
+        abortAlias("gateF_vs_gates", bufGateF, bufGates);
+        abortAlias("gateG_vs_gates", bufGateG, bufGates);
+        abortAlias("gateO_vs_gates", bufGateO, bufGates);
+        abortAlias("cellOut_vs_gates", bufCellOut, bufGates);
+        abortAlias("hiddenOut_vs_gates", bufHiddenOut, bufGates);
+
+        abortAlias("gateI_vs_prevCell", bufGateI, bufPrevCell);
+        abortAlias("gateF_vs_prevCell", bufGateF, bufPrevCell);
+        abortAlias("gateG_vs_prevCell", bufGateG, bufPrevCell);
+        abortAlias("gateO_vs_prevCell", bufGateO, bufPrevCell);
+        abortAlias("cellOut_vs_prevCell", bufCellOut, bufPrevCell);
+        abortAlias("hiddenOut_vs_prevCell", bufHiddenOut, bufPrevCell);
+
+        abortAlias("gateI_vs_gateF", bufGateI, bufGateF);
+        abortAlias("gateI_vs_gateG", bufGateI, bufGateG);
+        abortAlias("gateI_vs_gateO", bufGateI, bufGateO);
+        abortAlias("gateI_vs_cellOut", bufGateI, bufCellOut);
+        abortAlias("gateI_vs_hiddenOut", bufGateI, bufHiddenOut);
+        abortAlias("gateF_vs_gateG", bufGateF, bufGateG);
+        abortAlias("gateF_vs_gateO", bufGateF, bufGateO);
+        abortAlias("gateF_vs_cellOut", bufGateF, bufCellOut);
+        abortAlias("gateF_vs_hiddenOut", bufGateF, bufHiddenOut);
+        abortAlias("gateG_vs_gateO", bufGateG, bufGateO);
+        abortAlias("gateG_vs_cellOut", bufGateG, bufCellOut);
+        abortAlias("gateG_vs_hiddenOut", bufGateG, bufHiddenOut);
+        abortAlias("gateO_vs_cellOut", bufGateO, bufCellOut);
+        abortAlias("gateO_vs_hiddenOut", bufGateO, bufHiddenOut);
+        abortAlias("cellOut_vs_hiddenOut", bufCellOut, bufHiddenOut);
+
+        const NSUInteger gatesBytesNeeded = static_cast<NSUInteger>(batchSize * 4 * hiddenSize * sizeof(float));
+        const NSUInteger stateBytesNeeded = static_cast<NSUInteger>(batchSize * hiddenSize * sizeof(float));
+
+        auto abortIfTooSmall = [&](const char* tag, id<MTLBuffer> buf, NSUInteger need)
+        {
+            const NSUInteger have = [buf length];
+            if (have < need)
+            {
+                std::cout
+                    << "DIAG_ABORT_GATESTATE_BUFFER_TOO_SMALL"
+                    << ",tag=" << tag
+                    << ",have=" << static_cast<unsigned long long>(have)
+                    << ",need=" << static_cast<unsigned long long>(need)
+                    << ",batchSize=" << batchSize
+                    << ",hiddenSize=" << hiddenSize
+                    << "\n";
+                std::abort();
+            }
+        };
+
+        abortIfTooSmall("gates", bufGates, gatesBytesNeeded);
+        abortIfTooSmall("prevCell", bufPrevCell, stateBytesNeeded);
+        abortIfTooSmall("gateI", bufGateI, stateBytesNeeded);
+        abortIfTooSmall("gateF", bufGateF, stateBytesNeeded);
+        abortIfTooSmall("gateG", bufGateG, stateBytesNeeded);
+        abortIfTooSmall("gateO", bufGateO, stateBytesNeeded);
+        abortIfTooSmall("cellOut", bufCellOut, stateBytesNeeded);
+        abortIfTooSmall("hiddenOut", bufHiddenOut, stateBytesNeeded);
 
         [encoder setBuffer:bufGates offset:0 atIndex:0];
         [encoder setBuffer:bufPrevCell offset:0 atIndex:1];
@@ -292,6 +403,7 @@ void GateStateFused(const ContinuousMemory<float, DeviceTags::Metal>& gates,
 
         // ✅ ASYNC: do NOT wait here
         [commandBuffer commit];
+        [commandBuffer waitUntilCompleted];
     }
 }
 
@@ -307,6 +419,7 @@ void MatMulBias(const ContinuousMemory<float, DeviceTags::Metal>& a,
         {
             return;
         }
+        WaitForAll();
 
         // First do the MPS GEMM into c
         MatMul(a, b, c, m, k, n);
@@ -354,6 +467,7 @@ void MatMul(const ContinuousMemory<float, DeviceTags::Metal>& a,
         {
             return;
         }
+        WaitForAll();
 
         id<MTLDevice> device = GetDevice();
         if (!device)

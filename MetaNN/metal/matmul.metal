@@ -78,15 +78,58 @@ kernel void gate_state_fused_f32(
     const float fLogits = gates[gateRowBase + hiddenSize + h];
     const float gLogits = gates[gateRowBase + 2u * hiddenSize + h];
     const float oLogits = gates[gateRowBase + 3u * hiddenSize + h];
+    
+    if (gid == 0)
+    {
+        gateI[0] = iLogits;
+        gateF[0] = fLogits;
+        gateG[0] = gLogits;
+        gateO[0] = oLogits;
+    }
+
+    if (!isfinite(iLogits) || !isfinite(fLogits) ||
+        !isfinite(gLogits) || !isfinite(oLogits))
+    {
+        gateI[stateIndex] = NAN;
+        gateF[stateIndex] = NAN;
+        gateG[stateIndex] = NAN;
+        gateO[stateIndex] = NAN;
+        cellOut[stateIndex] = NAN;
+        hiddenOut[stateIndex] = NAN;
+        return;
+    }
 
     const float i = 1.0f / (1.0f + exp(-iLogits));
     const float f = 1.0f / (1.0f + exp(-fLogits));
     const float g = tanh(gLogits);
     const float o = 1.0f / (1.0f + exp(-oLogits));
 
+    if (!isfinite(i) || !isfinite(f) ||
+        !isfinite(g) || !isfinite(o))
+    {
+        gateI[stateIndex] = NAN;
+        gateF[stateIndex] = NAN;
+        gateG[stateIndex] = NAN;
+        gateO[stateIndex] = NAN;
+        cellOut[stateIndex] = NAN;
+        hiddenOut[stateIndex] = NAN;
+        return;
+    }
+
     const float prevC = prevCell[stateIndex];
     const float c = f * prevC + i * g;
     const float hOut = o * tanh(c);
+
+    if (!isfinite(c) || !isfinite(hOut))
+    {
+        gateI[stateIndex] = NAN;
+        gateF[stateIndex] = NAN;
+        gateG[stateIndex] = NAN;
+        gateO[stateIndex] = NAN;
+        cellOut[stateIndex] = NAN;
+        hiddenOut[stateIndex] = NAN;
+        return;
+    }
 
     gateI[stateIndex] = i;
     gateF[stateIndex] = f;
