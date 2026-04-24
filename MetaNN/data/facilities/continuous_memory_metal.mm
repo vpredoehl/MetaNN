@@ -75,8 +75,13 @@ void* ContinuousMemory<TElem, DeviceTags::Metal>::NativeHandle() const
     return (__bridge void*)m_impl->buffer;
 }
 
+template<typename TElem>
+size_t ContinuousMemory<TElem, DeviceTags::Metal>::Offset() const
+{
+    return m_offset;
+}
+
 // explicit instantiations
 template class ContinuousMemory<float, DeviceTags::Metal>;
 template class ContinuousMemory<double, DeviceTags::Metal>;
 }
-

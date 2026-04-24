@@ -78,6 +78,7 @@ public:
     bool IsShared() const;
     size_t Size() const;
     void* NativeHandle() const;
+    size_t Offset() const;
 private:
     struct Impl;
     std::shared_ptr<Impl> m_impl;
@@ -85,5 +86,4 @@ private:
     size_t m_size = 0;
 };
 }
-
 

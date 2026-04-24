@@ -41,6 +41,12 @@ namespace
         return (__bridge id<MTLBuffer>)mem.NativeHandle();
     }
 
+    template <typename TMem>
+    NSUInteger BufferOffsetBytes(const TMem& mem)
+    {
+        return static_cast<NSUInteger>(mem.Offset() * sizeof(float));
+    }
+
     struct KernelKey
     {
         size_t m;
@@ -114,6 +120,7 @@ namespace
     }
 
     MPSMatrix* MakeMatrix(id<MTLBuffer> buffer,
+                          NSUInteger offsetBytes,
                           size_t rows,
                           size_t cols,
                           size_t rowBytes)
@@ -129,7 +136,9 @@ namespace
             throw std::runtime_error("MetalMatMul: failed to create MPSMatrixDescriptor");
         }
 
-        MPSMatrix* mat = [[MPSMatrix alloc] initWithBuffer:buffer descriptor:desc];
+        MPSMatrix* mat = [[MPSMatrix alloc] initWithBuffer:buffer
+                                                    offset:offsetBytes
+                                                descriptor:desc];
         if (!mat)
         {
             throw std::runtime_error("MetalMatMul: failed to create MPSMatrix");
@@ -262,6 +271,14 @@ void GateStateFused(const ContinuousMemory<float, DeviceTags::Metal>& gates,
         id<MTLBuffer> bufGateO = BufferOf(gateO);
         id<MTLBuffer> bufCellOut = BufferOf(cellOut);
         id<MTLBuffer> bufHiddenOut = BufferOf(hiddenOut);
+        const NSUInteger offGates = BufferOffsetBytes(gates);
+        const NSUInteger offPrevCell = BufferOffsetBytes(prevCell);
+        const NSUInteger offGateI = BufferOffsetBytes(gateI);
+        const NSUInteger offGateF = BufferOffsetBytes(gateF);
+        const NSUInteger offGateG = BufferOffsetBytes(gateG);
+        const NSUInteger offGateO = BufferOffsetBytes(gateO);
+        const NSUInteger offCellOut = BufferOffsetBytes(cellOut);
+        const NSUInteger offHiddenOut = BufferOffsetBytes(hiddenOut);
         
         static bool s_printedGateStateBufferDiag = false;
         if (!s_printedGateStateBufferDiag)
@@ -379,14 +396,14 @@ void GateStateFused(const ContinuousMemory<float, DeviceTags::Metal>& gates,
         abortIfTooSmall("cellOut", bufCellOut, stateBytesNeeded);
         abortIfTooSmall("hiddenOut", bufHiddenOut, stateBytesNeeded);
 
-        [encoder setBuffer:bufGates offset:0 atIndex:0];
-        [encoder setBuffer:bufPrevCell offset:0 atIndex:1];
-        [encoder setBuffer:bufGateI offset:0 atIndex:2];
-        [encoder setBuffer:bufGateF offset:0 atIndex:3];
-        [encoder setBuffer:bufGateG offset:0 atIndex:4];
-        [encoder setBuffer:bufGateO offset:0 atIndex:5];
-        [encoder setBuffer:bufCellOut offset:0 atIndex:6];
-        [encoder setBuffer:bufHiddenOut offset:0 atIndex:7];
+        [encoder setBuffer:bufGates offset:offGates atIndex:0];
+        [encoder setBuffer:bufPrevCell offset:offPrevCell atIndex:1];
+        [encoder setBuffer:bufGateI offset:offGateI atIndex:2];
+        [encoder setBuffer:bufGateF offset:offGateF atIndex:3];
+        [encoder setBuffer:bufGateG offset:offGateG atIndex:4];
+        [encoder setBuffer:bufGateO offset:offGateO atIndex:5];
+        [encoder setBuffer:bufCellOut offset:offCellOut atIndex:6];
+        [encoder setBuffer:bufHiddenOut offset:offHiddenOut atIndex:7];
 
         uint32_t batchCount = static_cast<uint32_t>(batchSize);
         uint32_t hiddenCount = static_cast<uint32_t>(hiddenSize);
@@ -431,13 +448,15 @@ void MatMulBias(const ContinuousMemory<float, DeviceTags::Metal>& a,
 
         id<MTLBuffer> bufC = BufferOf(c);
         id<MTLBuffer> bufBias = BufferOf(bias);
+        const NSUInteger offC = BufferOffsetBytes(c);
+        const NSUInteger offBias = BufferOffsetBytes(bias);
 
         uint mm = (uint)m;
         uint nn = (uint)n;
 
         [enc setComputePipelineState:pso];
-        [enc setBuffer:bufC offset:0 atIndex:0];
-        [enc setBuffer:bufBias offset:0 atIndex:1];
+        [enc setBuffer:bufC offset:offC atIndex:0];
+        [enc setBuffer:bufBias offset:offBias atIndex:1];
         [enc setBytes:&mm length:sizeof(mm) atIndex:2];
         [enc setBytes:&nn length:sizeof(nn) atIndex:3];
 
@@ -489,6 +508,9 @@ void MatMul(const ContinuousMemory<float, DeviceTags::Metal>& a,
         id<MTLBuffer> bufA = BufferOf(a);
         id<MTLBuffer> bufB = BufferOf(b);
         id<MTLBuffer> bufC = BufferOf(c);
+        const NSUInteger offA = BufferOffsetBytes(a);
+        const NSUInteger offB = BufferOffsetBytes(b);
+        const NSUInteger offC = BufferOffsetBytes(c);
 
         if (!bufA || !bufB || !bufC)
         {
@@ -501,9 +523,9 @@ void MatMul(const ContinuousMemory<float, DeviceTags::Metal>& a,
         const size_t rowBytesB = n * sizeof(float);
         const size_t rowBytesC = n * sizeof(float);
 
-        MPSMatrix* matA = MakeMatrix(bufA, m, k, rowBytesA);
-        MPSMatrix* matB = MakeMatrix(bufB, k, n, rowBytesB);
-        MPSMatrix* matC = MakeMatrix(bufC, m, n, rowBytesC);
+        MPSMatrix* matA = MakeMatrix(bufA, offA, m, k, rowBytesA);
+        MPSMatrix* matB = MakeMatrix(bufB, offB, k, n, rowBytesB);
+        MPSMatrix* matC = MakeMatrix(bufC, offC, m, n, rowBytesC);
 
         MPSMatrixMultiplication* kernel = GetKernel(m, k, n);
 
