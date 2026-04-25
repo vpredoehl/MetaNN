@@ -3,6 +3,10 @@
 //  MetaNNXC
 //
 
+#if !__has_feature(objc_arc)
+#error "ARC must be enabled for Metal .mm files"
+#endif
+
 #import <Foundation/Foundation.h>
 #import <Metal/Metal.h>
 #import <MetalPerformanceShaders/MetalPerformanceShaders.h>
@@ -224,7 +228,6 @@ void GateStateFused(const ContinuousMemory<float, DeviceTags::Metal>& gates,
         {
             return;
         }
-        WaitForAll();
 
         id<MTLDevice> device = GetDevice();
         if (device == nil)
@@ -418,7 +421,7 @@ void GateStateFused(const ContinuousMemory<float, DeviceTags::Metal>& gates,
           threadsPerThreadgroup:MTLSizeMake(tgSize, 1, 1)];
         [encoder endEncoding];
 
-        // ✅ ASYNC: do NOT wait here
+        // This helper is synchronous for now so callers can safely read outputs immediately.
         [commandBuffer commit];
         [commandBuffer waitUntilCompleted];
     }
@@ -436,7 +439,6 @@ void MatMulBias(const ContinuousMemory<float, DeviceTags::Metal>& a,
         {
             return;
         }
-        WaitForAll();
 
         // First do the MPS GEMM into c
         MatMul(a, b, c, m, k, n);
@@ -486,7 +488,6 @@ void MatMul(const ContinuousMemory<float, DeviceTags::Metal>& a,
         {
             return;
         }
-        WaitForAll();
 
         id<MTLDevice> device = GetDevice();
         if (!device)

@@ -4,6 +4,9 @@
 //
 //  Created by Vincent Predoehl on 3/8/26.
 //
+#if !__has_feature(objc_arc)
+#error "ARC must be enabled for Metal .mm files"
+#endif
 
 #import <Foundation/Foundation.h>
 #import <Metal/Metal.h>
