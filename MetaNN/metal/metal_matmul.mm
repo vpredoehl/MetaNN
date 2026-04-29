@@ -51,6 +51,45 @@ namespace
         return static_cast<NSUInteger>(mem.Offset() * sizeof(float));
     }
 
+    inline void ValidateBufferRange(const char* op,
+                                    const char* tag,
+                                    id<MTLBuffer> buf,
+                                    NSUInteger offsetBytes,
+                                    NSUInteger requiredBytes)
+    {
+        if (!buf)
+        {
+            std::cout << "DIAG_ABORT_METAL_BUFFER_NULL"
+                      << ",op=" << op
+                      << ",tag=" << tag
+                      << "\n";
+            std::abort();
+        }
+
+        const NSUInteger have = [buf length];
+        if (offsetBytes > have || requiredBytes > have - offsetBytes)
+        {
+            std::cout << "DIAG_ABORT_METAL_BUFFER_RANGE"
+                      << ",op=" << op
+                      << ",tag=" << tag
+                      << ",have=" << static_cast<unsigned long long>(have)
+                      << ",offset=" << static_cast<unsigned long long>(offsetBytes)
+                      << ",need=" << static_cast<unsigned long long>(requiredBytes)
+                      << ",end=" << static_cast<unsigned long long>(offsetBytes + requiredBytes)
+                      << "\n";
+            std::abort();
+        }
+    }
+
+    inline void ThrowIfCommandBufferFailed(id<MTLCommandBuffer> cmd, const char* op)
+    {
+        if (cmd.status == MTLCommandBufferStatusError)
+        {
+            NSString* errStr = cmd.error ? cmd.error.localizedDescription : @"unknown command buffer error";
+            throw std::runtime_error(std::string(op) + ": " + [errStr UTF8String]);
+        }
+    }
+
     struct KernelKey
     {
         size_t m;
@@ -373,31 +412,14 @@ void GateStateFused(const ContinuousMemory<float, DeviceTags::Metal>& gates,
         const NSUInteger gatesBytesNeeded = static_cast<NSUInteger>(batchSize * 4 * hiddenSize * sizeof(float));
         const NSUInteger stateBytesNeeded = static_cast<NSUInteger>(batchSize * hiddenSize * sizeof(float));
 
-        auto abortIfTooSmall = [&](const char* tag, id<MTLBuffer> buf, NSUInteger need)
-        {
-            const NSUInteger have = [buf length];
-            if (have < need)
-            {
-                std::cout
-                    << "DIAG_ABORT_GATESTATE_BUFFER_TOO_SMALL"
-                    << ",tag=" << tag
-                    << ",have=" << static_cast<unsigned long long>(have)
-                    << ",need=" << static_cast<unsigned long long>(need)
-                    << ",batchSize=" << batchSize
-                    << ",hiddenSize=" << hiddenSize
-                    << "\n";
-                std::abort();
-            }
-        };
-
-        abortIfTooSmall("gates", bufGates, gatesBytesNeeded);
-        abortIfTooSmall("prevCell", bufPrevCell, stateBytesNeeded);
-        abortIfTooSmall("gateI", bufGateI, stateBytesNeeded);
-        abortIfTooSmall("gateF", bufGateF, stateBytesNeeded);
-        abortIfTooSmall("gateG", bufGateG, stateBytesNeeded);
-        abortIfTooSmall("gateO", bufGateO, stateBytesNeeded);
-        abortIfTooSmall("cellOut", bufCellOut, stateBytesNeeded);
-        abortIfTooSmall("hiddenOut", bufHiddenOut, stateBytesNeeded);
+        ValidateBufferRange("GateStateFused", "gates", bufGates, offGates, gatesBytesNeeded);
+        ValidateBufferRange("GateStateFused", "prevCell", bufPrevCell, offPrevCell, stateBytesNeeded);
+        ValidateBufferRange("GateStateFused", "gateI", bufGateI, offGateI, stateBytesNeeded);
+        ValidateBufferRange("GateStateFused", "gateF", bufGateF, offGateF, stateBytesNeeded);
+        ValidateBufferRange("GateStateFused", "gateG", bufGateG, offGateG, stateBytesNeeded);
+        ValidateBufferRange("GateStateFused", "gateO", bufGateO, offGateO, stateBytesNeeded);
+        ValidateBufferRange("GateStateFused", "cellOut", bufCellOut, offCellOut, stateBytesNeeded);
+        ValidateBufferRange("GateStateFused", "hiddenOut", bufHiddenOut, offHiddenOut, stateBytesNeeded);
 
         [encoder setBuffer:bufGates offset:offGates atIndex:0];
         [encoder setBuffer:bufPrevCell offset:offPrevCell atIndex:1];
@@ -424,6 +446,7 @@ void GateStateFused(const ContinuousMemory<float, DeviceTags::Metal>& gates,
         // This helper is synchronous for now so callers can safely read outputs immediately.
         [commandBuffer commit];
         [commandBuffer waitUntilCompleted];
+        ThrowIfCommandBufferFailed(commandBuffer, "GateStateFused");
     }
 }
 
@@ -452,6 +475,10 @@ void MatMulBias(const ContinuousMemory<float, DeviceTags::Metal>& a,
         id<MTLBuffer> bufBias = BufferOf(bias);
         const NSUInteger offC = BufferOffsetBytes(c);
         const NSUInteger offBias = BufferOffsetBytes(bias);
+        const NSUInteger cBytesNeeded = static_cast<NSUInteger>(m * n * sizeof(float));
+        const NSUInteger biasBytesNeeded = static_cast<NSUInteger>(n * sizeof(float));
+        ValidateBufferRange("MatMulBias", "c", bufC, offC, cBytesNeeded);
+        ValidateBufferRange("MatMulBias", "bias", bufBias, offBias, biasBytesNeeded);
 
         uint mm = (uint)m;
         uint nn = (uint)n;
@@ -474,6 +501,7 @@ void MatMulBias(const ContinuousMemory<float, DeviceTags::Metal>& a,
 
         [cmd commit];
         [cmd waitUntilCompleted];
+        ThrowIfCommandBufferFailed(cmd, "MatMulBias");
     }
 }
 
@@ -523,6 +551,12 @@ void MatMul(const ContinuousMemory<float, DeviceTags::Metal>& a,
         const size_t rowBytesA = k * sizeof(float);
         const size_t rowBytesB = n * sizeof(float);
         const size_t rowBytesC = n * sizeof(float);
+        const NSUInteger bytesA = static_cast<NSUInteger>(m * rowBytesA);
+        const NSUInteger bytesB = static_cast<NSUInteger>(k * rowBytesB);
+        const NSUInteger bytesC = static_cast<NSUInteger>(m * rowBytesC);
+        ValidateBufferRange("MatMul", "a", bufA, offA, bytesA);
+        ValidateBufferRange("MatMul", "b", bufB, offB, bytesB);
+        ValidateBufferRange("MatMul", "c", bufC, offC, bytesC);
 
         MPSMatrix* matA = MakeMatrix(bufA, offA, m, k, rowBytesA);
         MPSMatrix* matB = MakeMatrix(bufB, offB, k, n, rowBytesB);
@@ -543,12 +577,7 @@ void MatMul(const ContinuousMemory<float, DeviceTags::Metal>& a,
 
         [cmd commit];
         [cmd waitUntilCompleted];
-
-        if (cmd.status == MTLCommandBufferStatusError)
-        {
-            NSString* errStr = cmd.error ? cmd.error.localizedDescription : @"unknown command buffer error";
-            throw std::runtime_error(std::string("MetalMatMul: ") + [errStr UTF8String]);
-        }
+        ThrowIfCommandBufferFailed(cmd, "MetalMatMul");
     }
 }
 
@@ -570,6 +599,7 @@ void MatMul(const ContinuousMemory<float, DeviceTags::Metal>& a,
 
             [cmd commit];
             [cmd waitUntilCompleted];
+            ThrowIfCommandBufferFailed(cmd, "MetalMatMul::WaitForAll");
         }
     }
 } // namespace MetaNN::NSMetalMatMul
