@@ -14,6 +14,18 @@
 #include <mutex>
 #include <vector>
 
+#ifndef METAL_SMALL_BUFFER_POOL
+#define METAL_SMALL_BUFFER_POOL 1
+#endif
+
+#ifndef METAL_BUFFER_DIAG
+#define METAL_BUFFER_DIAG 0
+#endif
+
+#ifndef METAL_CONFIG_DIAG
+#define METAL_CONFIG_DIAG 1
+#endif
+
 namespace
 {
     std::atomic<size_t> g_metal_buffer_alloc_count{0};
@@ -40,7 +52,12 @@ namespace
 
     inline bool ShouldPrintMetalBufferDiag(size_t count)
     {
+#if METAL_BUFFER_DIAG
         return count <= 16 || (count % 1024) == 0;
+#else
+        (void)count;
+        return false;
+#endif
     }
 
     inline bool IsMetalSmallPoolEligible(size_t bytes)
@@ -55,6 +72,10 @@ namespace
 
     inline id<MTLBuffer> TryTakeSmallMetalBufferFromPool(size_t bytes)
     {
+#if !METAL_SMALL_BUFFER_POOL
+        (void)bytes;
+        return nil;
+#else
         if (!IsMetalSmallPoolEligible(bytes))
         {
             return nil;
@@ -70,10 +91,16 @@ namespace
         id<MTLBuffer> buffer = bucket.back();
         bucket.pop_back();
         return buffer;
+#endif
     }
 
     inline bool ReturnSmallMetalBufferToPool(id<MTLBuffer> buffer, size_t bytes)
     {
+#if !METAL_SMALL_BUFFER_POOL
+        (void)buffer;
+        (void)bytes;
+        return false;
+#else
         if (!buffer || !IsMetalSmallPoolEligible(bytes))
         {
             return false;
@@ -88,6 +115,7 @@ namespace
 
         bucket.push_back(buffer);
         return true;
+#endif
     }
 }
 
@@ -122,7 +150,6 @@ struct ContinuousMemory<TElem, DeviceTags::Metal>::Impl
     id<MTLBuffer> buffer = nil;
     size_t bytes = 0;
     size_t elems = 0;
-    bool pooled = false;
 
     ~Impl()
     {
@@ -135,7 +162,6 @@ struct ContinuousMemory<TElem, DeviceTags::Metal>::Impl
             const bool returnedToPool = ReturnSmallMetalBufferToPool(buffer, bytes);
             if (returnedToPool)
             {
-                pooled = true;
                 g_metal_buffer_pool_return_count.fetch_add(1, std::memory_order_relaxed);
             }
             else if (IsMetalSmallPoolEligible(bytes))
@@ -170,6 +196,19 @@ ContinuousMemory<TElem, DeviceTags::Metal>::ContinuousMemory(size_t p_size)
     if (!device)  throw std::runtime_error("Metal device not available.");
 
     const size_t allocBytes = sizeof(TElem) * p_size;
+#if METAL_CONFIG_DIAG
+    static bool s_printed_metal_config = false;
+    if (!s_printed_metal_config)
+    {
+        std::cout << "METAL_CONFIG"
+                  << ",METAL_SMALL_BUFFER_POOL=" << METAL_SMALL_BUFFER_POOL
+                  << ",METAL_BUFFER_DIAG=" << METAL_BUFFER_DIAG
+                  << ",pool_max_bytes=" << kMetalSmallBufferPoolMaxBytes
+                  << ",pool_max_per_size=" << kMetalSmallBufferPoolMaxPerSize
+                  << "\n";
+        s_printed_metal_config = true;
+    }
+#endif
     bool reusedBuffer = false;
     m_impl->buffer = TryTakeSmallMetalBufferFromPool(allocBytes);
     if (m_impl->buffer)
