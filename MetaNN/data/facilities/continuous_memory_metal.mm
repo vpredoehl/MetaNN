@@ -26,6 +26,8 @@
 #define METAL_CONFIG_DIAG 1
 #endif
 
+extern "C" bool LstmRuntimeDiagnosticLoggingEnabled() __attribute__((weak_import));
+
 namespace
 {
     std::atomic<size_t> g_metal_buffer_alloc_count{0};
@@ -198,7 +200,10 @@ ContinuousMemory<TElem, DeviceTags::Metal>::ContinuousMemory(size_t p_size)
     const size_t allocBytes = sizeof(TElem) * p_size;
 #if METAL_CONFIG_DIAG
     static bool s_printed_metal_config = false;
-    if (!s_printed_metal_config)
+    const bool runtimeDiagnosticLogging =
+        (LstmRuntimeDiagnosticLoggingEnabled == nullptr) ||
+        LstmRuntimeDiagnosticLoggingEnabled();
+    if (!s_printed_metal_config && runtimeDiagnosticLogging)
     {
         std::cout << "METAL_CONFIG"
                   << ",METAL_SMALL_BUFFER_POOL=" << METAL_SMALL_BUFFER_POOL
