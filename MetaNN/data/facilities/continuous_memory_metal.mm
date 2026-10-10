@@ -7,6 +7,7 @@
 #import <Foundation/Foundation.h>
 #import <Metal/Metal.h>
 #include "continuous_memory.h"
+#include <MetaNN/metal/metal_device.h>
 #include <atomic>
 #include <iostream>
 #include <type_traits>
@@ -194,16 +195,18 @@ ContinuousMemory<TElem, DeviceTags::Metal>::ContinuousMemory(size_t p_size)
 {
     if (p_size == 0)  throw std::runtime_error("Metal ContinuousMemory allocated with size 0");
 
-    id<MTLDevice> device = MTLCreateSystemDefaultDevice();
+    __unsafe_unretained id<MTLDevice> device = NSMetal::DefaultDevice();
     if (!device)  throw std::runtime_error("Metal device not available.");
 
     const size_t allocBytes = sizeof(TElem) * p_size;
 #if METAL_CONFIG_DIAG
-    static bool s_printed_metal_config = false;
+    static std::atomic<bool> s_printed_metal_config{false};
     const bool runtimeDiagnosticLogging =
         (LstmRuntimeDiagnosticLoggingEnabled == nullptr) ||
         LstmRuntimeDiagnosticLoggingEnabled();
-    if (!s_printed_metal_config && runtimeDiagnosticLogging)
+    if (!s_printed_metal_config.load(std::memory_order_relaxed) &&
+        runtimeDiagnosticLogging &&
+        !s_printed_metal_config.exchange(true, std::memory_order_relaxed))
     {
         std::cout << "METAL_CONFIG"
                   << ",METAL_SMALL_BUFFER_POOL=" << METAL_SMALL_BUFFER_POOL
@@ -211,7 +214,6 @@ ContinuousMemory<TElem, DeviceTags::Metal>::ContinuousMemory(size_t p_size)
                   << ",pool_max_bytes=" << kMetalSmallBufferPoolMaxBytes
                   << ",pool_max_per_size=" << kMetalSmallBufferPoolMaxPerSize
                   << "\n";
-        s_printed_metal_config = true;
     }
 #endif
     bool reusedBuffer = false;

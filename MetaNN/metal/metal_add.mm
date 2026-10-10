@@ -12,6 +12,7 @@
 #import <Metal/Metal.h>
 #include <stdexcept>
 #include "metal_add.h"
+#include "metal_device.h"
 
 namespace MetaNN::NSMetalAdd
 {
@@ -19,8 +20,7 @@ namespace MetaNN::NSMetalAdd
     {
         id<MTLDevice> GetDevice()
         {
-            static id<MTLDevice> device = MTLCreateSystemDefaultDevice();
-            return device;
+            return NSMetal::DefaultDevice();
         }
 
         id<MTLCommandQueue> GetQueue()

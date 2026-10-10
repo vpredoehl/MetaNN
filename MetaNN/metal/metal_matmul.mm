@@ -18,6 +18,7 @@
 #include <iostream>
 #include <cstdlib>
 #include "metal_matmul.h"
+#include "metal_device.h"
 
 namespace MetaNN::NSMetalMatMul
 {
@@ -25,8 +26,7 @@ namespace
 {
     id<MTLDevice> GetDevice()
     {
-        static id<MTLDevice> device = MTLCreateSystemDefaultDevice();
-        return device;
+        return NSMetal::DefaultDevice();
     }
     id<MTLLibrary> GetLibrary()
     {
