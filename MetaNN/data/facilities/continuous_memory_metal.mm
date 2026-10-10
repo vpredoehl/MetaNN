@@ -7,7 +7,7 @@
 #import <Foundation/Foundation.h>
 #import <Metal/Metal.h>
 #include "continuous_memory.h"
-#include <MetaNN/metal/metal_device.h>
+#include "../../metal/metal_device.h"
 #include <atomic>
 #include <iostream>
 #include <type_traits>
