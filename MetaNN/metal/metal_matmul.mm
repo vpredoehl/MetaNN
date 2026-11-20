@@ -332,19 +332,7 @@ void GateStateFused(const ContinuousMemory<float, DeviceTags::Metal>& gates,
         if (!s_printedGateStateHostProbe)
         {
             s_printedGateStateHostProbe = true;
-            const float* gatesHost = static_cast<const float*>([bufGates contents]);
-            std::cout << "DIAG_GATESTATE_GATES_HOST";
-            if (gatesHost)
-            {
-                const size_t probeCount = std::min<size_t>(32, dims.gateElements);
-                for (size_t i = 0; i < probeCount; ++i)
-                    std::cout << ",g" << i << "=" << gatesHost[i];
-            }
-            else
-            {
-                std::cout << ",contents=null";
-            }
-            std::cout << "\n";
+            Detail::WriteGateHostProbe(std::cout, gates, dims.gateElements);
         }
 
         auto abortAlias = [&](const char* tag, id<MTLBuffer> a, id<MTLBuffer> b)

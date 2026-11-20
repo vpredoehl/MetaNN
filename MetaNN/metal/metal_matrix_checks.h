@@ -63,4 +63,21 @@ namespace MetaNN::NSMetalMatMul::Detail
         return {batchCount, hiddenCount, stateElements, gateElements};
     }
 
+    // The caller verifies the full logical and physical range before observing it.
+    template <typename View>
+    void WriteGateHostProbe(std::ostream& out, const View& gates, std::size_t gateElements)
+    {
+        out << "DIAG_GATESTATE_GATES_HOST";
+        if (const auto* values = gates.RawMemory())
+        {
+            const auto count = std::min<std::size_t>(32, gateElements);
+            for (std::size_t i = 0; i < count; ++i)
+                out << ",g" << i << "=" << values[i];
+        }
+        else
+        {
+            out << ",contents=null";
+        }
+        out << "\n";
+    }
 }
