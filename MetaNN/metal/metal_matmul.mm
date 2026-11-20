@@ -83,6 +83,13 @@ namespace
 
     inline void ThrowIfCommandBufferFailed(id<MTLCommandBuffer> cmd, const char* op)
     {
+#if defined(METANN_MINIMAL_DIAGNOSTIC)
+        NSError* error = cmd.error;
+        std::cout << "MATMUL_COMMAND op=" << op << " status=" << cmd.status
+                  << " completed=" << (cmd.status == MTLCommandBufferStatusCompleted)
+                  << " error_domain=" << (error.domain.UTF8String ?: "none")
+                  << " error_code=" << error.code << std::endl;
+#endif
         if (cmd.status == MTLCommandBufferStatusError)
         {
             NSString* errStr = cmd.error ? cmd.error.localizedDescription : @"unknown command buffer error";
@@ -179,6 +186,11 @@ namespace
             throw std::runtime_error("MetalMatMul: failed to create MPSMatrixDescriptor");
         }
 
+#if defined(METANN_MINIMAL_DIAGNOSTIC)
+        std::cout << "MPS_BIND byte_offset=" << offsetBytes
+                  << " buffer_bytes=" << buffer.length << " rows=" << rows
+                  << " columns=" << cols << " row_bytes=" << rowBytes << std::endl;
+#endif
         MPSMatrix* mat = [[MPSMatrix alloc] initWithBuffer:buffer
                                                     offset:offsetBytes
                                                 descriptor:desc];

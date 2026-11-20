@@ -13,6 +13,10 @@
 #include <stdexcept>
 #include "metal_add.h"
 #include "metal_device.h"
+#include "metal_view_binding.h"
+#if defined(METANN_MINIMAL_DIAGNOSTIC)
+#include <iostream>
+#endif
 
 namespace MetaNN::NSMetalAdd
 {
@@ -100,6 +104,45 @@ namespace MetaNN::NSMetalAdd
             return (__bridge id<MTLBuffer>)mem.NativeHandle();
         }
 
+        void BindOperand(id<MTLComputeCommandEncoder> encoder,
+                         const ContinuousMemory<float, DeviceTags::Metal>& view,
+                         size_t count, NSUInteger slot)
+        {
+            id<MTLBuffer> buffer = BufferOf(view);
+            if (!buffer)
+                throw std::invalid_argument("MetalAdd operand has no buffer");
+
+            Detail::BindView<float>(view, buffer.length, count, slot,
+                [&](size_t offsetBytes, size_t index)
+                {
+#if defined(METANN_MINIMAL_DIAGNOSTIC)
+                    std::cout << "ADD_BIND slot=" << index
+                              << " element_offset=" << view.Offset()
+                              << " byte_offset=" << offsetBytes
+                              << " view_elements=" << view.Size()
+                              << " buffer_bytes=" << buffer.length
+                              << " count=" << count << std::endl;
+#endif
+                    [encoder setBuffer:buffer offset:offsetBytes atIndex:index];
+                });
+        }
+
+#if defined(METANN_MINIMAL_DIAGNOSTIC)
+        void ObserveCompletion(id<MTLCommandBuffer> command)
+        {
+            NSError* error = command.error;
+            std::cout << "ADD_COMMAND status=" << command.status
+                      << " completed=" << (command.status == MTLCommandBufferStatusCompleted)
+                      << " error_domain=" << (error.domain.UTF8String ?: "none")
+                      << " error_code=" << error.code << std::endl;
+            if (error)
+                std::cerr << "ADD_METAL_ERROR "
+                          << (error.localizedDescription.UTF8String ?: "unavailable") << std::endl;
+            if (command.status != MTLCommandBufferStatusCompleted || error)
+                throw std::runtime_error("MetalAdd command did not complete successfully");
+        }
+#endif
+
         void DispatchBinary(NSString* fnName,
                             const ContinuousMemory<float, DeviceTags::Metal>& a,
                             const ContinuousMemory<float, DeviceTags::Metal>& b,
@@ -112,15 +155,12 @@ namespace MetaNN::NSMetalAdd
                 id<MTLComputeCommandEncoder> enc = [cmd computeCommandEncoder];
                 id<MTLComputePipelineState> pso = GetPipeline(fnName);
 
-                id<MTLBuffer> bufA = BufferOf(a);
-                id<MTLBuffer> bufB = BufferOf(b);
-                id<MTLBuffer> bufC = BufferOf(c);
                 uint n = (uint)count;
 
                 [enc setComputePipelineState:pso];
-                [enc setBuffer:bufA offset:0 atIndex:0];
-                [enc setBuffer:bufB offset:0 atIndex:1];
-                [enc setBuffer:bufC offset:0 atIndex:2];
+                BindOperand(enc, a, count, 0);
+                BindOperand(enc, b, count, 1);
+                BindOperand(enc, c, count, 2);
                 [enc setBytes:&n length:sizeof(n) atIndex:3];
 
                 MTLSize grid = MTLSizeMake(count, 1, 1);
@@ -133,6 +173,9 @@ namespace MetaNN::NSMetalAdd
                 [enc endEncoding];
                 [cmd commit];
                 [cmd waitUntilCompleted];
+#if defined(METANN_MINIMAL_DIAGNOSTIC)
+                ObserveCompletion(cmd);
+#endif
             }
         }
 
@@ -147,13 +190,11 @@ namespace MetaNN::NSMetalAdd
                 id<MTLComputeCommandEncoder> enc = [cmd computeCommandEncoder];
                 id<MTLComputePipelineState> pso = GetPipeline(fnName);
 
-                id<MTLBuffer> bufA = BufferOf(a);
-                id<MTLBuffer> bufC = BufferOf(c);
                 uint n = (uint)count;
 
                 [enc setComputePipelineState:pso];
-                [enc setBuffer:bufA offset:0 atIndex:0];
-                [enc setBuffer:bufC offset:0 atIndex:1];
+                BindOperand(enc, a, count, 0);
+                BindOperand(enc, c, count, 1);
                 [enc setBytes:&n length:sizeof(n) atIndex:2];
 
                 MTLSize grid = MTLSizeMake(count, 1, 1);
@@ -166,6 +207,9 @@ namespace MetaNN::NSMetalAdd
                 [enc endEncoding];
                 [cmd commit];
                 [cmd waitUntilCompleted];
+#if defined(METANN_MINIMAL_DIAGNOSTIC)
+                ObserveCompletion(cmd);
+#endif
             }
         }
     }
