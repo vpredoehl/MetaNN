@@ -127,9 +127,9 @@ template<typename TElem>
 ContinuousMemory<TElem, DeviceTags::Metal>
 ContinuousMemory<TElem, DeviceTags::Metal>::Shift(size_t pos) const
 {
-    assert(pos < m_size);
+    const auto offset = MemoryDetail::ShiftedOffset(m_offset, m_size, pos);
     ContinuousMemory ret(*this);
-    ret.m_offset += pos;
+    ret.m_offset = offset;
     ret.m_size -= pos;
     return ret;
 }
@@ -194,10 +194,12 @@ ContinuousMemory<TElem, DeviceTags::Metal>::ContinuousMemory(size_t p_size)
 {
     if (p_size == 0)  throw std::runtime_error("Metal ContinuousMemory allocated with size 0");
 
+    const auto allocBytes = MemoryDetail::ByteCount<TElem>(p_size);
     id<MTLDevice> device = MTLCreateSystemDefaultDevice();
     if (!device)  throw std::runtime_error("Metal device not available.");
 
-    const size_t allocBytes = sizeof(TElem) * p_size;
+    if (allocBytes > device.maxBufferLength)
+        throw std::length_error("Metal ContinuousMemory exceeds device buffer limit");
 #if METAL_CONFIG_DIAG
     static bool s_printed_metal_config = false;
     const bool runtimeDiagnosticLogging =

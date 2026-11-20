@@ -26,7 +26,7 @@ public:
 
     ContinuousMemory Shift(size_t pos) const
     {
-        assert(pos < m_size);
+        MemoryDetail::ValidateShift(m_size, pos);
         return ContinuousMemory(std::shared_ptr<ElementType>(m_mem, m_mem.get() + pos),
                                 m_size - pos);
     }
