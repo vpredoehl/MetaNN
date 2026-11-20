@@ -1,9 +1,12 @@
 #pragma once
 #include <MetaNN/data/facilities/category_tags.h>
 #include <MetaNN/facilities/cont_metafuns/helpers.h>
+#include <MetaNN/data/facilities/checked_memory.h>
+#include <algorithm>
 #include <array>
 #include <cassert>
-#include <numeric>
+#include <cmath>
+#include <type_traits>
 #include <stdexcept>
 
 namespace MetaNN
@@ -25,8 +28,8 @@ namespace MetaNN
             {
                 size_t curGap = 1;
                 size_t res = IndexToOffset(dims, curGap, remIdx...);
-                gap = curGap * dims[indexPos + 1];
-                res += static_cast<size_t>(curIdx) * gap;
+                gap = MemoryDetail::CheckedProduct(curGap, dims[indexPos + 1]);
+                res = MemoryDetail::CheckedSum(res, MemoryDetail::CheckedProduct(static_cast<size_t>(curIdx), gap));
                 return res;
             }
         }
@@ -49,6 +52,27 @@ namespace MetaNN
         template <size_t ID, typename TShape, typename TCurParam, typename... TShapeParameter>
         void FillShape(TShape& pShape, TCurParam curParam, TShapeParameter... shapes)
         {
+            if constexpr (std::is_floating_point_v<TCurParam>)
+            {
+                const auto value = static_cast<long double>(curParam);
+                const auto limit = std::ldexp(1.0L, std::numeric_limits<size_t>::digits);
+                if (!(value >= 0 && value < limit) || std::trunc(value) != value)
+                    throw std::invalid_argument("Invalid MetaNN dimension");
+            }
+            else if constexpr (std::is_integral_v<TCurParam>)
+            {
+                if constexpr (std::is_signed_v<TCurParam>)
+                {
+                    if (curParam < 0)
+                        throw std::invalid_argument("Negative MetaNN dimension");
+                }
+                if constexpr (std::numeric_limits<TCurParam>::digits >
+                              std::numeric_limits<size_t>::digits)
+                {
+                    if (curParam > static_cast<TCurParam>(std::numeric_limits<size_t>::max()))
+                        throw std::overflow_error("MetaNN dimension exceeds size_t");
+                }
+            }
             pShape[ID] = static_cast<size_t>(curParam);
             FillShape<ID + 1>(pShape, shapes...);
         }
@@ -93,8 +117,12 @@ namespace MetaNN
         
         size_t Count() const
         {
-            return std::accumulate(std::begin(m_dims), std::end(m_dims),
-                                   static_cast<size_t>(1), std::multiplies<>());
+            if (std::find(m_dims.begin(), m_dims.end(), 0) != m_dims.end())
+                return 0;
+            std::size_t count = 1;
+            for (const auto dim : m_dims)
+                count = MemoryDetail::CheckedProduct(count, dim);
+            return count;
         }
         
 
@@ -106,6 +134,8 @@ namespace MetaNN
         
         std::array<size_t, DimNum> OffsetToIndex(size_t offset) const
         {
+            if (std::find(m_dims.begin(), m_dims.end(), 0) != m_dims.end())
+                throw std::out_of_range("Empty MetaNN shape");
             std::array<size_t, DimNum> res;
             for (int i = (int)DimNum - 1; i >= 0; --i)
             {
@@ -124,12 +154,26 @@ namespace MetaNN
             if (carry == 0) return;
             if (carry > 0)
             {
+                if (std::find(m_dims.begin(), m_dims.end(), 0) != m_dims.end())
+                    throw std::out_of_range("Empty MetaNN shape");
                 size_t uCarry = (size_t)carry;
                 for (int i = (int)DimNum - 1; i >= 0; --i)
                 {
-                    indexes[i] += uCarry;
-                    uCarry = indexes[i] / m_dims[i];
-                    indexes[i] %= m_dims[i];
+                    const auto dim = m_dims[i];
+                    if (indexes[i] >= dim)
+                        throw std::out_of_range("Invalid dimension index.");
+                    const auto remaining = dim - indexes[i];
+                    const auto remainder = uCarry % dim;
+                    uCarry /= dim;
+                    if (remainder >= remaining)
+                    {
+                        indexes[i] = remainder - remaining;
+                        ++uCarry;
+                    }
+                    else
+                    {
+                        indexes[i] += remainder;
+                    }
                     if (uCarry == 0) return;
                 }
                 if (uCarry)

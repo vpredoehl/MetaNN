@@ -29,8 +29,8 @@ namespace MetaNN
             {
                 size_t curGap = 1;
                 auto [pos, val] = OffsetAndVal(shape, curGap, nextParam, remPara...);
-                gap = curGap * shape[indexPos + 1];
-                pos += static_cast<size_t>(curIdx) * gap;
+                gap = MemoryDetail::CheckedProduct(curGap, shape[indexPos + 1]);
+                pos = MemoryDetail::CheckedSum(pos, MemoryDetail::CheckedProduct(static_cast<size_t>(curIdx), gap));
                 return std::pair(pos, val);
             }
         }
@@ -61,7 +61,10 @@ namespace MetaNN
                         MetaNN::Shape<uDim> p_shape)
             : m_shape(std::move(p_shape))
             , m_mem(std::move(p_mem))
-        {}
+        {
+            if (m_shape.Count() > m_mem.Size())
+                throw std::out_of_range("Tensor shape exceeds memory view");
+        }
 
         const auto& Shape() const noexcept
         {
@@ -105,20 +108,16 @@ namespace MetaNN
             {
                 using AimType = Tensor<ElementType, DeviceType, uDim - 1>;
                 MetaNN::Shape<uDim - 1> aimShape;
-                size_t count = 1;
-                for (size_t i = 1; i < uDim; ++i)
-                {
-                    const size_t curDim = m_shape[i];
-                    aimShape[i - 1] = curDim;
-                    count *= curDim;
-                }
+                if (id >= m_shape[0])
+                    throw std::out_of_range("Tensor slice index out of range");
 
-                const size_t pos = id * count;
-                if (pos >= m_shape.Count())
-                {
-                    throw std::runtime_error("ID out of bound.");
-                }
-                return AimType(m_mem.Shift(pos), aimShape);
+                for (size_t i = 1; i < uDim; ++i)
+                    aimShape[i - 1] = m_shape[i];
+
+                const auto count = aimShape.Count();
+                if (count == 0)
+                    throw std::out_of_range("Cannot shift into an empty tensor slice");
+                return AimType(m_mem.Shift(MemoryDetail::CheckedProduct(id, count)), aimShape);
             }
             else
             {
@@ -165,7 +164,8 @@ namespace MetaNN
         explicit Tensor(ContinuousMemory<ElementType, DeviceType> p_mem)
             : m_mem(std::move(p_mem))
         {
-            assert(m_mem.Size() >= 1);
+            if (m_mem.Size() < 1)
+                throw std::out_of_range("Scalar requires a nonempty memory view");
         }
 
         const auto& Shape() const noexcept

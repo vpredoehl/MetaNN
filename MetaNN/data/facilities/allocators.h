@@ -1,6 +1,7 @@
 #pragma once
 
 #include <MetaNN/data/facilities/device_tags.h>
+#include <MetaNN/data/facilities/checked_memory.h>
 #include <memory>
 #include <mutex>
 #include <unordered_map>
@@ -55,20 +56,15 @@ public:
         {
             return nullptr;
         }
-        p_elemSize *= sizeof(T);
-        
-        if (p_elemSize & 0x3ff)
-        {
-            p_elemSize = ((p_elemSize >> 10) + 1) << 10;
-        }
+        const auto bytes = MemoryDetail::CpuAllocationBytes<T>(p_elemSize);
 
         std::lock_guard<std::mutex> guard(m_mutex);
 
         static AllocHelper allocateHelper;
-        auto& slot = allocateHelper.memBuffer[p_elemSize];
+        auto& slot = allocateHelper.memBuffer[bytes];
         if (slot.empty())
         {
-            auto raw_buf = (T*)new char[p_elemSize];
+            auto raw_buf = (T*)new char[bytes];
             return std::shared_ptr<T>(raw_buf, DesImpl(slot));
         }
         else
